@@ -55,6 +55,7 @@ const selecionarTodosModulos = (req, res) => {
         return res.status(200).json(modulos);
     });
 }
+//localhost:8079/modulo/desativarModulo
 const desativarModulo = (req, res) => {
     const { id } = req.body;
     const desativar = "UPDATE modulo SET status = ? WHERE id_modulo = ?";
@@ -66,6 +67,7 @@ const desativarModulo = (req, res) => {
         return res.status(200).json({ mensagem: "Modulo desativado com sucesso" });
     })
 }
+//localhost:8079/modulo/ativarModulo
 const ativarModulo = (req, res) => {
     const { id } = req.body;
     const ativar = "UPDATE modulo SET status = ? WHERE id_modulo = ?";
