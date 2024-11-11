@@ -26,7 +26,7 @@ const cadastrar = (req, res) => {
 
     db.query(procuraEmail, [email], (err, result) => {
 
-        if (err) return res.status(400).json({ mensagem: "Erro ao procurar email." });
+        if (err) return res.status(400).json({ mensagem: "Erro ao consultar o banco de dados." });
 
         if (result.length > 0) {
             return res.status(400).json({ mensagem: "Email já existe na base de dados." });
@@ -147,7 +147,7 @@ const selecionarUsuario = (req, res) => {
     }
     const procuraUsuario = "SELECT * FROM usuario WHERE id_usuario = ?";
     db.query(procuraUsuario, id, (err, results) => {
-        if (err) return res.status(400).json({ mensagem: "Erro ao procurar usuario" });
+        if (err) return res.status(400).json({ mensagem: "Erro ao consultar o banco de dados." });
 
         if (results.length === 0) {
             return res.status(400).json({ mensagem: "Usuário não encontrado !" });
@@ -166,6 +166,7 @@ const selecionarUsuario = (req, res) => {
 const selecionarTodosUsuarios = (req, res) => {
     const selecionarTodos = "SELECT id_usuario,e_mail, nome FROM usuario WHERE status=1"
     db.query(selecionarTodos, (err, results) => {
+        if (err) return res.status(400).json({ mensagem: "Erro ao consultar o banco de dados." })
         if (results.length === 0) return res.status(400).json({ mensagem: "Nenhum usuário foi cadastrado ainda !" })
         let usuarios = results;
         res.status(200).json(usuarios);
