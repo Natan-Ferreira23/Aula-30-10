@@ -34,6 +34,7 @@ const editarUsuarioModulo = (req, res) => {
         });
     })
 }
+//localhost:8079/usuarioModulo/selecionarUsuariosModulos
 const selecionarUsuarioModulo = (req, res) => {
     const selecionar = "SELECT * FROM usuario_modulo";
 
