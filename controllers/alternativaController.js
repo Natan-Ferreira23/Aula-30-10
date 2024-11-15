@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 //localhost:8079/alternativa/cadastro
 const cadastrar = (req, res) => {
     const { texto, idAtividade } = req.body;
-    const inserir = "INSERT INTO alternativa (texto, fk_id_atividade) VALUES (?,?)";
+    const inserir = "INSERT INTO alternativa (texto, fk_atividade_id_atividade) VALUES (?,?)";
 
     if (!texto) return res.status(400).json({ mensagem: "É necessário informar o texto " });
     if (!idAtividade) return res.status(400).json({ mensagem: "É necessário informar o id da atividade" })

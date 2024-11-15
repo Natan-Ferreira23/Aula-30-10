@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 //localhost:8079/atividade/cadastro
 const cadastrar = (req, res) => {
     const { respostaCerta, nome, texto, idModulo } = req.body;
-    const insereAtividade = "INSERT INTO atividade (resposta_certa, nome, texto, fk_id_modulo) values(?,?,?,?)";
+    const insereAtividade = "INSERT INTO atividade (resposta_certa, nome, texto, fk_modulo_id_modulo) values(?,?,?,?)";
     if (!respostaCerta) return res.status(400).json({ mensagem: "É necesário informar o campo resposta certa" });
     if (!nome) return res.status(400).json({ mensagem: "É necessário informar o nome !" });
     if (!texto) return res.status(400).json({ mensagem: "É necessário informar o texto" });
@@ -19,7 +19,7 @@ const cadastrar = (req, res) => {
 //localhost:8079/atividade/editarAtividade
 const editarAtividade = (req, res) => {
     const { idAtividade, respostaCerta, nome, texto, idModulo } = req.body;
-    const editarAtividade = "UPDATE atividade SET resposta_certa = ?, nome = ?, texto = ?, fk_id_modulo = ? WHERE id_atividade = ? AND status =1";
+    const editarAtividade = "UPDATE atividade SET resposta_certa = ?, nome = ?, texto = ?, fk_modulo_id_modulo = ? WHERE id_atividade = ? AND status =1";
     const verificaAitividade = "SELECT * FROM atividade WHERE status =1 and id_atividade =?";
 
     if (!idAtividade) return res.status(400).json({ mensagem: "Informe qual atividade deseja editar" })

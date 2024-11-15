@@ -121,12 +121,12 @@ const editarEmail = (req, res) => {
     if (!email || !id) {
         return res.status(400).json({ mensagem: "Email e id são obrigatórios" });
     }
-    const procuraEmail = "SELECT e_mail,status FROM usuario WHERE id_usuario = ? AND status = 1";
+    const procuraEmail = "SELECT e_mail,status FROM usuario WHERE id_usuario = ? AND status = ?";
     const mudarEmail = "UPDATE usuario SET e_mail = ? WHERE id_usuario = ?";
     if (!regexEmail.test(email)) {
         return res.status(400).json("Email invalido !");
     }
-    db.query(procuraEmail, [id], (err, results) => {
+    db.query(procuraEmail, [id, true], (err, results) => {
         if (err) return res.status(400).json({ mensagem: "Erro ao consultar o banco de dados." });
         if (results.length === 0) return res.status(400).json({ mensagem: "Id incorreto ou usuário se encontra desativado!" });
 

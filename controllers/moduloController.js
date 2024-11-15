@@ -25,22 +25,29 @@ const cadastrar = (req, res) => {
 //localhost:8079/modulo/editarNome
 const editarNome = (req, res) => {
     const { id, nome } = req.body;
-    procuraId = "SELECT * FROM modulo WHERE id_modulo =? AND status = 1";
-    verificaNomeModulo = "SELECT * FROM modulo WHERE nome_modulo =? AND status =1 ";
+    procuraId = "SELECT * FROM modulo WHERE id_modulo =? AND status = ?";
+    verificaNomeModulo = "SELECT * FROM modulo WHERE nome_modulo =? AND status =? ";
     alteraNome = "UPDATE modulo set nome_modulo =? WHERE id_modulo = ?"
     if (!id || !nome) return res.status(400).json({ mensagem: " É necessário informar o id e nome " });
     console.log(id + " " + nome)
-    //verifica se já existe módulos com este nome
-    db.query(verificaNomeModulo, [nome], (err, results) => {
-        if (err) return res.status(400).json({ mensagem: "Erro ao consultar o banco de dados." })
-        if (results.length != 0) return res.status(400).json({ mensagem: "Já existe módulos com este nome !" })
-        //Se não houver, altera o nome do módulo
-        db.query(alteraNome, [nome, id], (err, results) => {
-            if (err) return res.status(400).json({ mensagem: " Erro ao alterar o nome !" })
+    //verifica se o id existe na tabela
+    db.query(procuraId, [id, true], (err, results) => {
+        if (err) return res.status(400).json({ mensagme: "Erro ao consultar o banco !" })
+        if (results.length === 0) return res.status(400).json({ mensagem: "Não existe modulo com este id" })
+        //verifica se o nome já é utilizado por algum modulo
+        db.query(verificaNomeModulo, [nome, true], (err, results) => {
+            if (err) return res.status(400).json({ mensagem: "Erro ao consultar o banco de dados." })
 
-            res.status(200).json({ mensagem: "Nome alterado com sucesso !" })
+            if (results.length != 0) return res.status(400).json({ mensagem: "Já existe módulos com este nome !" })
+            //Se não houver, altera o nome do módulo
+            db.query(alteraNome, [nome, id], (err, results) => {
+                if (err) return res.status(400).json({ mensagem: " Erro ao alterar o nome !" })
+
+                res.status(200).json({ mensagem: "Nome alterado com sucesso !" })
+            })
         })
     })
+
 }
 //localhost:8079/modulo/selecionarModulos
 const selecionarTodosModulos = (req, res) => {
