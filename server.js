@@ -8,6 +8,7 @@ const atividadeRoutes = require('./routes/ativadeRoutes');
 const alternativaRoutes = require('./routes/alternativaRoutes');
 const certificadoRoutes = require('./routes/certificadoRoutes');
 const usuario_moduloRoutes = require('./routes/usuario_moduloRoutes');
+const apiDadosRoutes = require('./routes/apiDadosRoutes');
 const app = express();
 const porta = 8079;
 
@@ -18,6 +19,9 @@ app.use('/atividade', atividadeRoutes);
 app.use('/alternativa', alternativaRoutes);
 app.use('/certificado', certificadoRoutes);
 app.use('/usuarioModulo', usuario_moduloRoutes);
+app.use('/apiDados', apiDadosRoutes);
+
+
 app.listen(porta, () => {
     console.log("SERVIDOR RODANDO NA PORTA " + porta);
 });

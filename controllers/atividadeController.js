@@ -87,4 +87,43 @@ const selecionarAtividades = (req, res) => {
         return res.status(200).json(results);
     });
 }
-module.exports = { cadastrar, editarAtividade, desativarAtividade, ativarAtividade, selecionarAtividades }
+//localhost:8079/atividade/acertar
+const acertar = (req, res) => {
+    const { id } = req.body;
+    const procuraAcertos = "SELECT acerto FROM atividade WHERE id_atividade=? AND status = ?";
+    const inserindoAcerto = "UPDATE atividade SET acerto =? WHERE id_atividade=? AND status=? ";
+    //Procuta o acerto através do id
+    db.query(procuraAcertos, [id, true], (err, results) => {
+        if (err) return res.status(200).json({ mensagem: "Erro ao consultar o banco" });
+        if (results.length === 0) return res.status(200).json({ mensagem: "Não registros no banco" });
+        const acertos = results[0].acerto + 1; //acrescenta um acerto 
+        console.log(acertos);
+        //atualiza o acerto no banco 
+        db.query(inserindoAcerto, [acertos, id, true], (err, results) => {
+            if (err) return res.status(400).json({ mensagem: "Erro ao consultar o banco " });
+
+            return res.status(200).json({ mensagem: "Você acertou" });
+        });
+    })
+}
+
+//localhost:8079/atividade/errar
+const errar = (req, res) => {
+    const { id } = req.body;
+    const procuraErro = "SELECT erro FROM atividade WHERE id_atividade=? AND status = ?";
+    const inserindoErro = "UPDATE atividade SET erro =? WHERE id_atividade=? AND status=? ";
+    //Procuta o acerto através do id
+    db.query(procuraErro, [id, true], (err, results) => {
+        if (err) return res.status(200).json({ mensagem: "Erro ao consultar o banco" });
+        if (results.length === 0) return res.status(200).json({ mensagem: "Não registros no banco" });
+        let erros = results[0].erro + 1;
+
+        //atualiza o erro no banco 
+        db.query(inserindoErro, [erros, id, true], (err, results) => {
+            if (err) return res.status(400).json({ mensagem: "Erro ao consultar o banco " });
+
+            return res.status(200).json({ mensagem: "Você errou " });
+        });
+    })
+}
+module.exports = { cadastrar, editarAtividade, desativarAtividade, ativarAtividade, selecionarAtividades, acertar, errar }

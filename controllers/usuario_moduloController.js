@@ -45,4 +45,21 @@ const selecionarUsuarioModulo = (req, res) => {
         return res.status(200).json(usuarios_modulos);
     });
 }
-module.exports = { cadastrar, editarUsuarioModulo, selecionarUsuarioModulo }
+
+//localhost:8079/usuarioModulo/iniciarModulo
+const iniciarModulo = (req, res) => {
+    const { id } = req.body;
+    const verificar = "SELECT * FROM usuario_modulo WHERE id_usuario_modulo=? AND status =?";
+    const iniciar = "UPDATE usuario_modulo SET iniciado =? WHERE id_usuario_modulo = ? AND status =?";
+    db.query(verificar, [id, true], (err, results) => {
+        if (err) return res.status(400).json({ mensagem: "Erro ao consultar o banco" });
+        if (results.length === 0) return res.status(400).json({ mensagem: "Não há registros" });
+
+        db.query(iniciar, [true, id, true], (err, results) => {
+            if (err) return res.status(400).json({ mensagem: "Erro ao consultar o banco" });
+
+            return res.status(200).json({ mensagem: "Modulo iniciado " });
+        });
+    });
+}
+module.exports = { cadastrar, editarUsuarioModulo, selecionarUsuarioModulo, iniciarModulo }
