@@ -1,6 +1,27 @@
 const express = require('express');
 const { perguntasErradas, perguntasCertas, pessoasCertificado, quantidadeCertificado, mediaNotas, totalModulos, moduloIniciado } = require("../controllers/apiDadosController");
 const router = express.Router();
+/**
+ * @swagger
+ * /apiDados/perguntasErradas:
+ *   get:
+ *     summary: Top 5 perguntas erradas
+ *     tags: [Dados Estatísticos]
+ *     responses:
+ *       200:
+ *         description: Lista de perguntas erradas
+ */
+
+/**
+ * @swagger
+ * /apiDados/mediaNotas:
+ *   get:
+ *     summary: Média de notas
+ *     tags: [Dados Estatísticos]
+ *     responses:
+ *       200:
+ *         description: Média de notas retornada
+ */
 
 router.get('/perguntasErradas', perguntasErradas); //top 5 perguntas erradas;
 router.get('/perguntasCertas', perguntasCertas); // top 5 perguntas certas;
