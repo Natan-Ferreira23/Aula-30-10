@@ -11,6 +11,7 @@ const usuario_moduloRoutes = require('./routes/usuario_moduloRoutes');
 const apiDadosRoutes = require('./routes/apiDadosRoutes');
 const app = express();
 const porta = 8079;
+const swaggerConfig = require('./swagger'); 
 
 app.use(express.json());
 app.use('/usuario', usuarioRoutes); // Prefixo para as rotas
@@ -20,6 +21,7 @@ app.use('/alternativa', alternativaRoutes);
 app.use('/certificado', certificadoRoutes);
 app.use('/usuarioModulo', usuario_moduloRoutes);
 app.use('/apiDados', apiDadosRoutes);
+swaggerConfig(app);
 
 
 app.listen(porta, () => {
