@@ -25,18 +25,16 @@ Este projeto é o back end de um aplicativo chamado motociclista consciente, que
    git clone https://github.com/seu-usuario/nome-do-repositorio.git
    
 2. Entre no diretório do projeto:
-    ```bash
+   ```bash
    cd nome-do-repositorio
     
 3.Instale as dependências:
    ```bash
-    npm install
+  npm install
 
 4.Inicie o servidor:
-    ```bash
-  node server.js
-
-
+   ```bash
+   node server.js
 
 Endpoints Principais
 Método	Rota	Descrição
@@ -46,8 +44,6 @@ GET	/usuario/selecionarUsuarios	Listar todos os usuários
 PUT	/usuario/editarSenha	Alterar a senha do usuário
 GET	/api-docs	Acessar a documentação Swagger
 Consulte a documentação completa no Swagger: http://localhost:8079/api-docs.
-
-
 
 Estrutura do Projeto
 📂 nome-do-projeto
