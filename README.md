@@ -29,7 +29,7 @@ Este projeto é o back end de um aplicativo chamado motociclista consciente, que
    cd nome-do-repositorio
     
 3.Instale as dependências:
-    ```bash
+   ```bash
     npm install
 
 4.Inicie o servidor:
