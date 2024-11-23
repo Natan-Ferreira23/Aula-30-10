@@ -85,6 +85,7 @@ const editarSenha = (req, res) => {
         if (results.length === 0) return res.status(400).json({ mensagem: "Email incorreto ou usuário se encontra desativado!" });
 
         const senhaCripto = bCrypt.hashSync(senha, 10);
+        console.log(senhaCripto);
         db.query(mudarSenha, [senhaCripto, email], (err) => {
             if (err) return res.status(400).json({ mensagem: "Não foi possível mudar a senha." });
             res.status(200).json({ mensagem: "Senha alterada com sucesso!" });

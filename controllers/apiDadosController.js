@@ -88,7 +88,7 @@ const mediaNotas = (req, res) => {
         return res.status(200).json(mediaNotas);
     });
 }
-//localhost:8079/apiDados/totalModulos
+//localhost:8079/apiDados/moduloIniciado
 const moduloIniciado = (req, res) => {
     const sql = `SELECT
                      COUNT(*) as Iniciado_modulos
