@@ -1,5 +1,5 @@
 const express = require('express');
-const { cadastrar, editarAtividade, desativarAtividade, ativarAtividade, selecionarAtividades, acertar, errar } = require("../controllers/atividadeController");
+const { cadastrar, editarAtividade, desativarAtividade, ativarAtividade, selecionarAtividades, selecionarAtividade, acertar, errar } = require("../controllers/atividadeController");
 const router = express.Router();
 
 /**
@@ -190,6 +190,7 @@ router.put('/editarAtividade', editarAtividade);
 router.put('/desativarAtividade', desativarAtividade);
 router.put('/ativarAtividade', ativarAtividade);
 router.get('/selecionarAtividades', selecionarAtividades);
+router.get('/selecionarAtividade', selecionarAtividade);
 router.post('/acertar', acertar);
 router.post('/errar', errar);
 module.exports = router;

@@ -1,5 +1,5 @@
 const express = require('express');
-const { cadastrar, editarAlternativa, desativarAlternativa, ativarAlternativa, selecionarAlternativas } = require("../controllers/alternativaController");
+const { cadastrar, editarAlternativa, desativarAlternativa, ativarAlternativa, selecionarAlternativasModulos, selecionarTodasAlternativas } = require("../controllers/alternativaController");
 const router = express.Router();
 /**
  * @swagger
@@ -127,6 +127,7 @@ router.post('/cadastro', cadastrar);
 router.put('/editarAlternativa', editarAlternativa);
 router.put('/desativarAlternativa', desativarAlternativa);
 router.put('/ativarAlternativa', ativarAlternativa);
-router.get('/selecionarAlternativas', selecionarAlternativas);
+router.get('/selecionarAlternativasModulos', selecionarAlternativasModulos);
+router.get('/selecionarTodasAlternativas', selecionarTodasAlternativas);
 
 module.exports = router;

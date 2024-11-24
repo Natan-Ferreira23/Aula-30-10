@@ -1,10 +1,15 @@
 const db = require('../database/db');
-const jwt = require('jsonwebtoken');
+// const jwt = require('jsonwebtoken');
+
+//=============================================================================
+//SÓ DEUS NA CAUSA
 
 //localhost:8079/usuarioModulo/cadastro
 const cadastrar = (req, res) => {
-    const { porcentagemConcluido, idModulo, idUsuario } = req.body;
+
+    const { idModulo, idUsuario } = req.body;
     const inserir = "INSERT INTO usuario_modulo (porcentagem_concluido, fk_modulo_id_modulo, fk_usuario_id_usuario) VALUES (?,?,?)"
+
     if (!porcentagemConcluido) return res.status(400).json({ mensagem: "É necessário informar porcentagem concluida" });
     if (!idModulo) return res.status(400).json({ mensagem: "É necessário id do modulo" });
     if (!idUsuario) return res.status(400).json({ mensagem: "É necessário id do usuário " });
