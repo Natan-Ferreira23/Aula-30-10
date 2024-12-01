@@ -6,15 +6,15 @@ const db = require('../database/db');
 //localhost:8079/atividade/cadastro
 const cadastrar = (req, res) => {
 
-    const { nome, texto, idModulo } = req.body;
+    const { texto, idModulo } = req.body;
 
-    const insereAtividade = "INSERT INTO atividade (nome, texto, fk_modulo_id_modulo) values(?,?,?)";
+    const insereAtividade = "INSERT INTO atividade (texto, fk_modulo_id_modulo) values(?,?)";
 
-    if (!nome || !texto || !idModulo) {
+    if (!texto || !idModulo) {
         return res.status(400).json({ mensagem: "Alguma informação esta vazia" });
     }
 
-    db.query(insereAtividade, [nome, texto, idModulo], (err, results) => {
+    db.query(insereAtividade, [texto, idModulo], (err, results) => {
         if (err) {
             return res.status(400).json({ mensagem: "Erro ao consultar o banco" });
         }
@@ -26,25 +26,16 @@ const cadastrar = (req, res) => {
 //localhost:8079/atividade/editarAtividade
 const editarAtividade = (req, res) => {
 
-    const { idAtividade, nome, texto, idModulo } = req.body;
+    const { texto, id } = req.body;
 
-    const editarAtividade = "UPDATE atividade SET nome = ?, texto = ?, fk_modulo_id_modulo = ? WHERE id_atividade = ? AND status = 1";
-    const verificaAitividade = "SELECT * FROM atividade WHERE status = 1 and id_atividade = ?";
+    const editarAtividade = "UPDATE atividade SET texto = ? WHERE id_atividade = ?";
+    const verificaAitividade = "SELECT * FROM atividade WHERE id_atividade = ?";
 
     if (!idAtividade) {
         return res.status(400).json({ mensagem: "Informe qual atividade deseja editar" });
     }
-    if (!respostaCerta) {
-        return res.status(400).json({ mensagem: "É necesário informar o campo resposta certa" });
-    }
-    if (!nome) {
-        return res.status(400).json({ mensagem: "É necessário informar o nome!" });
-    }
     if (!texto) {
         return res.status(400).json({ mensagem: "É necessário informar o texto" });
-    }
-    if (!idModulo) {
-        return res.status(400).json({ mensagem: "É necessário informar o módulo" });
     }
 
     //verifica se o id existe
@@ -126,8 +117,23 @@ const ativarAtividade = (req, res) => {
 
 }
 
-//localhost:8079/atividade/selecionarAtividades
-const selecionarAtividades = (req, res) => {
+//localhost:8079/atividade/selecionarAtividadesAdmin
+const selecionarAtividadesAdmin = (req, res) => {
+
+    const selecao = "SELECT a.id_atividade, a.texto, m.nome FROM atividade as a inner join modulo m on m.id_modulo = a.fk_modulo_id_modulo  ";
+
+    db.query(selecao, (err, results) => {
+        if (err) {
+            return res.status(400).json({ mensagem: "Erro ao consultar o banco !" });
+        }
+
+        const atividades = results;
+
+        return res.status(200).json(results);
+    });
+}
+//localhost:8079/atividade/selecionarAtividadesAtivo
+const selecionarAtividadesAtivo = (req, res) => {
 
     const selecao = "SELECT * FROM atividade WHERE status = 1";
 
@@ -142,7 +148,7 @@ const selecionarAtividades = (req, res) => {
     });
 }
 
-//localhost:8079/atividade/selecionarAtividades
+//localhost:8079/atividade/selecionarAtividade
 const selecionarAtividade = (req, res) => {
 
     const selecao = "SELECT * FROM atividade WHERE id_atividade = ?";
@@ -218,4 +224,25 @@ const errar = (req, res) => {
     })
 }
 
-module.exports = { cadastrar, editarAtividade, desativarAtividade, ativarAtividade, selecionarAtividades, selecionarAtividade, acertar, errar }
+//=================================
+
+const selecionarAtividadesPorModulo = (req, res) => {
+    const idModulo = req.query.idModulo;
+
+    if (!idModulo) {
+        return res.status(400).json({ mensagem: "O id do módulo é obrigatório!" });
+    }
+
+    const selecao = "SELECT * FROM atividade WHERE status = 1 AND fk_modulo_id_modulo = ?";
+
+    db.query(selecao, [idModulo], (err, results) => {
+        if (err) return res.status(400).json({ mensagem: "Erro ao consultar o banco!" });
+
+        return res.status(200).json(results);
+    });
+};
+
+
+//=================================
+
+module.exports = { cadastrar, editarAtividade, desativarAtividade, ativarAtividade, selecionarAtividadesAtivo, selecionarAtividadesAdmin, selecionarAtividade, acertar, errar, selecionarAtividadesPorModulo }

@@ -1,5 +1,5 @@
 const express = require('express');
-const { cadastrar, editarNome, editarModulo, selecionarTodosModulos, desativarModulo, ativarModulo } = require('../controllers/moduloController');
+const { cadastrar, editarNome, editarModulo, selecionarTodosModulos, selecionarTodosModulosAtivados, desativarModulo, ativarModulo } = require('../controllers/moduloController');
 
 //const verificarToken = require('../middlewares/authMiddleware');
 
@@ -141,6 +141,7 @@ router.post('/editarModulo', editarModulo);
 router.put("/desativarModulo", desativarModulo);
 router.put("/ativarModulo", ativarModulo);
 router.get('/selecionarModulos', selecionarTodosModulos);
+router.get('/selecionarTodosModulosAtivados', selecionarTodosModulosAtivados);
 
 
 module.exports = router;

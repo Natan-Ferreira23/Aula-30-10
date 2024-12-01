@@ -1,5 +1,5 @@
 const express = require('express');
-const { cadastrar, editarUsuarioModulo, selecionarUsuarioModulo, iniciarModulo } = require('../controllers/usuario_moduloController');
+const { cadastrar, cadastrarRelacaoUsuariosModulos, editarUsuarioModulo, selecionarUsuarioModulo, iniciarModulo, ativarUsuarioModulo, desativarUsuarioModulo, atualizarIniciado } = require('../controllers/usuario_moduloController');
 //const verificarToken = require('../middlewares/authMiddleware');
 
 const router = express.Router();
@@ -118,10 +118,12 @@ const router = express.Router();
  */
 
 router.post('/cadastro', cadastrar);
+router.post('/cadastrarRelacaoUsuariosModulos', cadastrarRelacaoUsuariosModulos);
 router.put("/editarUsuarioModulo", editarUsuarioModulo);
 router.get("/selecionarUsuariosModulos", selecionarUsuarioModulo);
 router.put("/iniciarModulo", iniciarModulo);
-
-
+router.put("/ativarUsuarioModulo", ativarUsuarioModulo);
+router.put("/desativarUsuarioModulo", desativarUsuarioModulo);
+router.post("/atualizarIniciado", atualizarIniciado);
 
 module.exports = router;

@@ -21,7 +21,6 @@ const perguntasErradas = (req, res) => {
 
         return res.status(200).json(top5PerguntasErradas);
     })
-
 };
 
 //localhost:8079/apiDados/perguntasCertas
@@ -84,7 +83,7 @@ const quantidadeCertificado = (req, res) => {
 //localhost:8079/apiDados/mediaNotas
 const mediaNotas = (req, res) => {
 
-    const sql = `SELECT PORCENTAGEM_CONCLUIDO FROM USUARIO_MODULO WHERE STATUS = ?;`;
+    const sql = `SELECT NOTA_FINAL FROM USUARIO_MODULO WHERE STATUS = ?;`;
 
     db.query(sql, [true], (err, results) => {
         if (err) {
@@ -120,7 +119,7 @@ const moduloIniciado = (req, res) => {
 //localhost:8079/apiDados/totalModulos
 const totalModulos = (req, res) => {
 
-    const sql = `SELECT COUNT(*) as Total_modulos FROM modulo WHERE STATUS = ?;`;
+    const sql = `SELECT COUNT(*) as Total_modulos FROM usuario_modulo WHERE STATUS = ?;`;
 
     db.query(sql, [true], (err, results) => {
         if (err) {

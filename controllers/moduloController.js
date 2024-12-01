@@ -1,45 +1,51 @@
 const db = require('../database/db');
-// const jwt = require('jsonwebtoken');
-
-//VERIFICADO
 
 //localhost:8079/modulo/cadastro
 const cadastrar = (req, res) => {
-    const { nome, porcentagem } = req.body;
+    const { nome, porcentagem_necessaria } = req.body;
 
-    if (nome.length > 100 && nome.length < 0) {
-        res.status(400).json({ mensagem: "Nome do usuario necessita ser menor que 100 digitos" });
-    } else {
+    if (!nome) {
+        return res.status(400).json({ mensagem: "Nome é obrigatório" });
+    }
 
-        const insereModulo = "INSERT INTO modulo(nome, porcentagem_necessaria) VALUES (?, ?) ";
-        const procuraNome = "SELECT nome FROM modulo WHERE nome = ?";
+    const insereModulo = "INSERT INTO modulo (NOME, PORCENTAGEM_NECESSARIA) VALUES(?, ?)";
 
-        if (!nome || !porcentagem) {
-            return res.status(400).json({ mensagem: "É obrigatório informar o nome e porcentagem !" });
+    db.query(insereModulo, [nome, porcentagem_necessaria || '60'], (err) => {
+        if (err) {
+            return res.status(400).send("Não foi possível inserir o módulo.");
         }
 
-        if (isNaN(porcentagem)) {
-            return res.status(400).json({ mensagme: "O numero deve ser um numero" });
-        }
-
-        db.query(procuraNome, [nome], (err, results) => {
+        // Obtendo o ID do módulo recém-cadastrado
+        db.query("SELECT id_modulo FROM modulo WHERE nome = ?", [nome], (err, result) => {
             if (err) {
-                return res.status(400).json({ mensagem: "Erro ao consultar o banco de dados." });
-            }
-            if (results != 0) {
-                return res.status(400).json({ mensagem: "Um módulo com este nome já existe no sistema" });
+                return res.status(400).json({ mensagem: "Erro ao buscar ID do módulo." });
             }
 
-            db.query(insereModulo, [nome, porcentagem], (err, results) => {
+            const idModulo = result[0].id_modulo;
+
+            // Obtendo todas as IDs dos usuários
+            db.query("SELECT id_usuario FROM usuario", (err, results) => {
                 if (err) {
-                    return res.status(400).json({ mensagem: "Erro ao consultar o banco de dados." });
+                    return res.status(400).json({ mensagem: "Erro ao buscar IDs dos usuários." });
                 }
 
-                res.status(200).json({ mensagem: "Módulo inserido com sucesso !!" })
+                // Usando forEach para relacionar todos os usuários com o módulo recém-cadastrado
+                results.forEach((result) => {
+                    const idUsuario = result.id_usuario;
+                    const insereUsuarioModulo = "INSERT INTO usuario_modulo (FK_MODULO_ID_MODULO, FK_USUARIO_ID_USUARIO) VALUES (?, ?)";
+
+                    db.query(insereUsuarioModulo, [idModulo, idUsuario], (err) => {
+                        if (err) {
+                            console.error('Erro ao inserir na tabela usuario_modulo:', err.stack);
+                        }
+                    });
+                });
+
+                res.status(200).json({ mensagem: "Módulo cadastrado com sucesso e relacionado com todos os usuários." });
             });
-        })
-    }
-}
+        });
+    });
+};
 
 //localhost:8079/modulo/editarNome
 const editarNome = (req, res) => {
@@ -125,9 +131,26 @@ const editarModulo = (req, res) => {
 
 //localhost:8079/modulo/selecionarModulos
 const selecionarTodosModulos = (req, res) => {
-
-    //seleciona todos os módulos que estão ativos
+    //seleciona todos os módulos
     const selecionar = "SELECT id_modulo, nome, porcentagem_necessaria, status FROM modulo";
+
+    db.query(selecionar, (err, results) => {
+        if (err) {
+            return res.status(400).json({ mensagem: "Erro ao consultar o banco de dados." });
+        }
+        if (results.length === 0) {
+            return res.status(400).json({ mensagem: "Não há nenhum módulo cadastrado" });
+        }
+
+        const modulos = results;
+
+        return res.status(200).json(modulos);
+    });
+}
+
+const selecionarTodosModulosAtivados = (req, res) => {
+    //seleciona todos os módulos que estão ativos
+    const selecionar = "SELECT id_modulo, nome, porcentagem_necessaria, status FROM modulo WHERE status = 1";
 
     db.query(selecionar, (err, results) => {
         if (err) {
@@ -186,6 +209,6 @@ const ativarModulo = (req, res) => {
         return res.status(200).json({ mensagem: "Modulo ativado com sucesso" });
     })
 }
-module.exports = { cadastrar, editarNome, editarModulo, selecionarTodosModulos, desativarModulo, ativarModulo }
+module.exports = { cadastrar, editarNome, editarModulo, selecionarTodosModulos, selecionarTodosModulosAtivados, desativarModulo, ativarModulo }
 
 //Falta editar porcentagem

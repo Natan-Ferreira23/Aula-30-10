@@ -1,5 +1,5 @@
 const express = require('express');
-const { cadastrar, login, editarNomeEmail, editarSenha, editarNome, editarEmail, selecionarUsuario, selecionarTodosUsuarios, desativarUsuario, ativarUsuario, mudarAdmin } = require('../controllers/usuarioController');
+const { cadastrar, login, editarSenha, editarNomeEmail, selecionarUsuario, selecionarTodosUsuarios, desativarUsuario, ativarUsuario, mudarAdmin } = require('../controllers/usuarioController');
 //const verificarToken = require('../middlewares/authMiddleware');
 
 const router = express.Router();
@@ -245,8 +245,6 @@ router.post('/cadastro', cadastrar);
 router.post('/login', login);
 router.post('/editarNomeEmail', editarNomeEmail);
 router.put('/editarSenha', editarSenha);
-router.put('/editarNome', editarNome);
-router.put('/editarEmail', editarEmail);
 router.get('/selecionarUsuario', selecionarUsuario);
 router.get('/selecionarUsuarios', selecionarTodosUsuarios);
 router.put('/desativarUsuario', desativarUsuario);

@@ -14,7 +14,7 @@ const cors = require('cors'); // para utilizar a api
 const swaggerConfig = require('./swagger');
 
 const app = express();
-const porta = 8079;
+const porta = 3000;
 // Habilitar CORS para todas as rotas
 app.use(cors());
 app.use(express.json());

@@ -1,10 +1,7 @@
 const bCrypt = require("bcrypt");
 const db = require('../database/db');
-// const jwt = require('jsonwebtoken');
-// const SECRET_KEY = "1020";
 
-//VERIFICADO
-
+//Verificado
 //http://localhost:8079/usuario/cadastro
 const cadastrar = (req, res) => {
 
@@ -35,46 +32,76 @@ const cadastrar = (req, res) => {
             return res.status(400).json({ mensagem: "Email já existe na base de dados." });
         }
 
+        // Banco de dados para inserir usuário
         db.query(insereUsuario, [nome, email, senhaHash], (err) => {
             if (err) {
                 return res.status(400).send("Não foi possível inserir o usuário.");
             }
-            res.status(200).json({ mensagem: "Usuário cadastrado com sucesso." });
+
+            // Obtendo o ID do usuário recém-cadastrado
+            db.query("SELECT id_usuario FROM usuario WHERE email = ?", [email], (err, result) => {
+                if (err) {
+                    return res.status(400).json({ mensagem: "Erro ao buscar ID do usuário." });
+                }
+
+                const idUsuario = result[0].id_usuario;
+
+                // Obtendo todas as IDs dos módulos
+                db.query("SELECT id_modulo FROM modulo", (err, results) => {
+                    if (err) {
+                        return res.status(400).json({ mensagem: "Erro ao buscar IDs dos módulos." });
+                    }
+
+                    // Usando forEach para relacionar o usuário com todos os módulos
+                    results.forEach((result) => {
+                        const idModulo = result.id_modulo;
+                        const insereUsuarioModulo = `INSERT INTO usuario_modulo (FK_MODULO_ID_MODULO, FK_USUARIO_ID_USUARIO) VALUES (?, ?)`;
+
+                        db.query(insereUsuarioModulo, [idModulo, idUsuario], (err) => {
+                            if (err) {
+                                console.error('Erro ao inserir na tabela usuario_modulo:', err.stack);
+                            }
+                        });
+                    });
+
+                    res.status(200).json({ mensagem: "Usuário cadastrado com sucesso e relacionado com todos os módulos." });
+                });
+            });
         });
     });
 };
 
+//Verifcado
 //http://localhost:8079/usuario/login
 const login = (req, res) => {
-
     const { email, senha } = req.body;
-
     if (!email || !senha) {
         return res.status(400).json({ mensagem: "Email e senha são obrigatórios" });
     }
-
-    const sql = "SELECT nome, email, senha FROM usuario WHERE email = ? AND status = 1";
+    const sql = "SELECT id_usuario, nome, email, senha, admin FROM usuario WHERE EMAIL = ? AND status = 1";
 
     db.query(sql, [email], async (err, results) => {
-        if (err) {
-            return res.status(500).json({ mensagem: "Erro ao consultar o banco de dados." });
-        }
+        if (err) return res.status(500).json({ mensagem: "Erro ao consultar o banco de dados." });
 
         if (results.length === 0) {
             return res.status(400).json({ mensagem: "Email incorreto! ou usuário se encontra desativado" });
         }
 
+        const id_usuario = results[0].id_usuario;
         const nome = results[0].nome;
+        const admin = results[0].admin;
         const senhaCripto = results[0].senha;
-        const senhaCorreta = await bCrypt.compare(senha, senhaCripto);
 
+        console.log(senhaCripto);
+        const senhaCorreta = await bCrypt.compare(senha, senhaCripto);
         if (senhaCorreta) {
-            return res.status(200).json({ message: "Login realizado com sucesso", nome, email });
+            return res.status(200).json({ message: "Login realizado com sucesso", id_usuario, nome, email, admin });
         } else {
             return res.status(400).json({ mensagem: "Senha incorreta!" });
         }
     });
 };
+
 
 //http://localhost:8079/usuario/editarNomeEmail
 const editarNomeEmail = (req, res) => {
@@ -98,102 +125,32 @@ const editarNomeEmail = (req, res) => {
     });
 };
 
-
+//Verificado
 //http://localhost:8079/usuario/editarSenha
 const editarSenha = (req, res) => {
 
-    const { email, senha } = req.body; //Recebe email, mas não é informado pelo usuario no front, pois ele poderia editar a conta de outro usuario
+    const { id_usuario, senhaNova } = req.body; //Recebe email, mas não é informado pelo usuario no front, pois ele poderia editar a conta de outro usuario
     const regexSenha = /[A-Za-z\d!@#$%^&*]{8,}/;
 
-    if (!email || !senha) {
-        return res.status(400).json({ mensagem: "Email e senha são obrigatórios" });
+    if (!id_usuario || !senhaNova) {
+        res.status(400).json({ mensagem: "Id e senha são obrigatórios" });
+        console.log(`Id do usuário que veio do reset: ${id_usuario} - ${senhaNova}`);
     }
 
-    const procuraUsuario = "SELECT email FROM usuario WHERE email = ? AND status = 1";
-    const mudarSenha = "UPDATE usuario SET senha = ? WHERE email = ?";
+    const mudarSenha = "UPDATE usuario SET senha = ? WHERE id_usuario = ?";
 
-    if (!regexSenha.test(senha)) {
-        return res.status(400).json({ mensagem: "Senha deve ter 8 caracteres" })
+    if (!regexSenha.test(senhaNova)) {
+        return res.status(400).json({ mensagem: "Senha deve ter 8 caracteres" });
     }
 
-    db.query(procuraUsuario, [email], (err, results) => {
+    const senhaCripto = bCrypt.hashSync(senhaNova, 10);
+    // console.log(senhaCripto);
+
+    db.query(mudarSenha, [senhaCripto, id_usuario], (err, results) => {
         if (err) {
-            return res.status(400).json({ mensagem: "Erro ao consultar o banco de dados." });
+            return res.status(400).json({ mensagem: "Não foi possível mudar a senha." });
         }
-        if (results.length === 0) {
-            return res.status(400).json({ mensagem: "Email incorreto ou usuário se encontra desativado!" });
-        }
-
-        const senhaCripto = bCrypt.hashSync(senha, 10);
-        // console.log(senhaCripto);
-
-        db.query(mudarSenha, [senhaCripto, email], (err) => {
-            if (err) {
-                return res.status(400).json({ mensagem: "Não foi possível mudar a senha." });
-            }
-            res.status(200).json({ mensagem: "Senha alterada com sucesso!" });
-        });
-    });
-};
-
-//http://localhost:8079/usuario/editarNome
-const editarNome = (req, res) => {
-    const { email, nome } = req.body;
-
-    if (!email || !nome) {
-        return res.status(400).json({ mensagem: "Email e nome são obrigatórios" });
-    }
-
-    const procuraUsuario = "SELECT email, status FROM usuario WHERE email = ? AND status = 1";
-    const mudarNome = "UPDATE usuario SET nome = ? WHERE email = ?";
-
-    db.query(procuraUsuario, [email], (err, results) => {
-        if (err) {
-            return res.status(400).json({ mensagem: "Erro ao consultar o banco de dados." });
-        }
-        if (results.length === 0) {
-            return res.status(400).json({ mensagem: "Email incorreto ou usuário se encontra desativado!" });
-        }
-
-        db.query(mudarNome, [nome, email], (err) => {
-            if (err) {
-                return res.status(400).json({ mensagem: "Não foi possível mudar o nome." });
-            }
-            res.status(200).json({ mensagem: "Nome alterado com sucesso!" });
-        });
-    });
-};
-
-//http://localhost:8079/usuario/editarEmail
-const editarEmail = (req, res) => {
-    const { id, email } = req.body;
-    const regexEmail = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-
-    if (!email || !id) {
-        return res.status(400).json({ mensagem: "Email e id são obrigatórios" });
-    }
-
-    const procuraEmail = "SELECT email, status FROM usuario WHERE id_usuario = ?";
-    const mudarEmail = "UPDATE usuario SET email = ? WHERE id_usuario = ?";
-
-    if (!regexEmail.test(email)) {
-        return res.status(400).json("Email invalido !");
-    }
-
-    db.query(procuraEmail, [id], (err, results) => {
-        if (err) {
-            return res.status(400).json({ mensagem: "Erro ao consultar o banco de dados." });
-        }
-        if (results.length === 0) {
-            return res.status(400).json({ mensagem: "Id incorreto ou usuário se encontra desativado!" });
-        }
-
-        db.query(mudarEmail, [email, id], (err, results) => {
-            if (err) {
-                return res.status(400).json({ mensagem: "Não foi possível mudar o email." });
-            }
-            res.status(200).json({ mensagem: "Email alterado com sucesso!" });
-        });
+        res.status(200).json({ mensagem: "Senha alterada com sucesso!" });
     });
 };
 
@@ -227,7 +184,7 @@ const selecionarUsuario = (req, res) => {
 //localhost:8079/usuario/selecionarUsuarios
 const selecionarTodosUsuarios = (req, res) => {
 
-    const selecionarTodos = "SELECT id_usuario, nome, email, status FROM usuario WHERE status=1"
+    const selecionarTodos = "SELECT id_usuario, nome, email, status FROM usuario WHERE status = 1"
 
     db.query(selecionarTodos, (err, results) => {
         if (err) {
@@ -336,6 +293,6 @@ const mudarAdmin = (req, res) => {
     });
 }
 
-module.exports = { cadastrar, login, editarNomeEmail, editarSenha, editarNome, selecionarUsuario, selecionarTodosUsuarios, editarEmail, desativarUsuario, ativarUsuario, mudarAdmin };
+module.exports = { cadastrar, login, editarNomeEmail, editarSenha, selecionarUsuario, selecionarTodosUsuarios, desativarUsuario, ativarUsuario, mudarAdmin };
 
 //Criar edit geral

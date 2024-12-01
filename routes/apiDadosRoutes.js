@@ -6,11 +6,11 @@ const router = express.Router();
  * @swagger
  * /apiDados/perguntasErradas:
  *   get:
- *     summary: Top 5 perguntas erradas
- *     tags: [Dados Estatísticos]
+ *     summary: Obter as cinco perguntas mais erradas
+ *     tags: [Atividade]
  *     responses:
  *       200:
- *         description: Lista das 5 perguntas mais erradas
+ *         description: Lista das cinco perguntas mais erradas
  *         content:
  *           application/json:
  *             schema:
@@ -18,13 +18,127 @@ const router = express.Router();
  *               items:
  *                 type: object
  *                 properties:
- *                   pergunta:
+ *                   TEXTO:
  *                     type: string
- *                     example: "Qual a capital do Brasil?"
- *                   quantidadeErros:
+ *                     example: "Texto da pergunta"
+ *                   ERRO:
  *                     type: integer
- *                     example: 25
+ *                     example: 10
+ *       400:
+ *         description: Erro na requisição
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 mensagem:
+ *                   type: string
+ *                   examples:
+ *                     erro_banco:
+ *                       summary: Erro no banco de dados
+ *                       value: "Erro ao consultar o banco de dados"
+ *                     sem_registros:
+ *                       summary: Sem registros
+ *                       value: "Não há nenhum resultado!"
  */
+
+/**
+ * @swagger
+ * /apiDados/perguntasCertas:
+ *   get:
+ *     summary: Obter as cinco perguntas mais acertadas
+ *     tags: [Atividade]
+ *     responses:
+ *       200:
+ *         description: Lista das cinco perguntas mais acertadas
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   TEXTO:
+ *                     type: string
+ *                     example: "Texto da pergunta"
+ *                   ACERTO:
+ *                     type: integer
+ *                     example: 10
+ *       400:
+ *         description: Erro na requisição
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 mensagem:
+ *                   type: string
+ *                   examples:
+ *                     erro_banco:
+ *                       summary: Erro no banco de dados
+ *                       value: "Erro ao consultar o banco"
+ *                     sem_registros:
+ *                       summary: Sem registros
+ *                       value: "Não há nenhum resultado!"
+ */
+
+/**
+ * @swagger
+ * /apiDados/pessoasCertificado:
+ *   get:
+ *     summary: Obter a quantidade de usuários certificados
+ *     tags: [Usuário]
+ *     responses:
+ *       200:
+ *         description: Quantidade de usuários certificados
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   Quantidade_de_usuarios:
+ *                     type: integer
+ *                     example: 100
+ *       400:
+ *         description: Erro na requisição
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 mensagem:
+ *                   type: string
+ *                   examples:
+ *                     erro_banco:
+ *                       summary: Erro no banco de dados
+ *                       value: "Erro ao consultar o banco"
+ *                     sem_registros:
+ *                       summary: Sem registros
+ *                       value: "Não há nenhum resultado!"
+ */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /**
  * @swagger

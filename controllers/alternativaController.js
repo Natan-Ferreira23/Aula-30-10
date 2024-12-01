@@ -1,7 +1,4 @@
 const db = require('../database/db');
-// const jwt = require('jsonwebtoken');
-
-//VERIFICADO
 
 //localhost:8079/alternativa/cadastro
 const cadastrar = (req, res) => {
@@ -9,7 +6,10 @@ const cadastrar = (req, res) => {
     const { texto, respostaCerta, idAtividade } = req.body;
     const inserir = "INSERT INTO alternativa (texto, resposta_certa, fk_atividade_id_atividade) VALUES (?,?,?)";
 
-    if (!texto || !respostaCerta || !idAtividade) {
+    if (!texto || !respostaCerta === undefined || !idAtividade) {
+        console.log("Texto: " + texto);
+        console.log("Resposta certa: " + respostaCerta);
+        console.log("ID atividade: " + idAtividade);
         return res.status(400).json({ mensagem: "É necessário informar o texto, se é a resposta certa e chave estrangeira" });
     }
 
@@ -148,4 +148,36 @@ const selecionarTodasAlternativas = (req, res) => {
     })
 }
 
-module.exports = { cadastrar, editarAlternativa, desativarAlternativa, ativarAlternativa, selecionarAlternativasModulos, selecionarTodasAlternativas }
+//=====================================
+
+//localhost:8079/alternativa/selecionarAlternativas
+const selecionarAlternativas = (req, res) => {
+    const selecionar = `
+    SELECT 
+        ALTERNATIVA.ID_ALTERNATIVA,
+        ALTERNATIVA.TEXTO,
+        ALTERNATIVA.RESPOSTA_CERTA,
+        ALTERNATIVA.FK_ATIVIDADE_ID_ATIVIDADE,
+        ATIVIDADE.FK_MODULO_ID_MODULO,
+        MODULO.NOME AS MODULO_NOME
+    FROM 
+        ALTERNATIVA
+    JOIN 
+        ATIVIDADE ON ALTERNATIVA.FK_ATIVIDADE_ID_ATIVIDADE = ATIVIDADE.ID_ATIVIDADE
+    JOIN 
+        MODULO ON ATIVIDADE.FK_MODULO_ID_MODULO = MODULO.ID_MODULO
+    WHERE 
+        ALTERNATIVA.STATUS = 1;
+  `;
+
+    db.query(selecionar, (err, results) => {
+        if (err) return res.status(400).json({ mensagem: "Erro ao consultar o banco " });
+        if (results.length === 0) return res.status(400).json({ mensagem: "Não há nenhum registro na tabela de alternativas " });
+        const alternativas = results;
+        return res.status(200).json(alternativas);
+    })
+}
+
+//=====================================
+
+module.exports = { cadastrar, editarAlternativa, desativarAlternativa, ativarAlternativa, selecionarAlternativasModulos, selecionarTodasAlternativas, selecionarAlternativas }
