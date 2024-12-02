@@ -1,16 +1,15 @@
 const express = require('express');
 const { perguntasErradas, perguntasCertas, pessoasCertificado, quantidadeCertificado, mediaNotas, totalModulos, moduloIniciado } = require("../controllers/apiDadosController");
 const router = express.Router();
-
 /**
  * @swagger
  * /apiDados/perguntasErradas:
  *   get:
- *     summary: Obter as cinco perguntas mais erradas
- *     tags: [Atividade]
+ *     summary: Retorna as 5 perguntas mais erradas
+ *     tags: [API Dados]
  *     responses:
  *       200:
- *         description: Lista das cinco perguntas mais erradas
+ *         description: Lista das 5 perguntas mais erradas
  *         content:
  *           application/json:
  *             schema:
@@ -18,134 +17,22 @@ const router = express.Router();
  *               items:
  *                 type: object
  *                 properties:
- *                   TEXTO:
+ *                   texto:
  *                     type: string
- *                     example: "Texto da pergunta"
- *                   ERRO:
+ *                     description: Texto da pergunta
+ *                   erro:
  *                     type: integer
- *                     example: 10
+ *                     description: Número de erros
  *       400:
- *         description: Erro na requisição
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 mensagem:
- *                   type: string
- *                   examples:
- *                     erro_banco:
- *                       summary: Erro no banco de dados
- *                       value: "Erro ao consultar o banco de dados"
- *                     sem_registros:
- *                       summary: Sem registros
- *                       value: "Não há nenhum resultado!"
+ *         description: Erro ao consultar o banco ou dados ausentes
  */
 
 /**
  * @swagger
  * /apiDados/perguntasCertas:
  *   get:
- *     summary: Obter as cinco perguntas mais acertadas
- *     tags: [Atividade]
- *     responses:
- *       200:
- *         description: Lista das cinco perguntas mais acertadas
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 type: object
- *                 properties:
- *                   TEXTO:
- *                     type: string
- *                     example: "Texto da pergunta"
- *                   ACERTO:
- *                     type: integer
- *                     example: 10
- *       400:
- *         description: Erro na requisição
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 mensagem:
- *                   type: string
- *                   examples:
- *                     erro_banco:
- *                       summary: Erro no banco de dados
- *                       value: "Erro ao consultar o banco"
- *                     sem_registros:
- *                       summary: Sem registros
- *                       value: "Não há nenhum resultado!"
- */
-
-/**
- * @swagger
- * /apiDados/pessoasCertificado:
- *   get:
- *     summary: Obter a quantidade de usuários certificados
- *     tags: [Usuário]
- *     responses:
- *       200:
- *         description: Quantidade de usuários certificados
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 type: object
- *                 properties:
- *                   Quantidade_de_usuarios:
- *                     type: integer
- *                     example: 100
- *       400:
- *         description: Erro na requisição
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 mensagem:
- *                   type: string
- *                   examples:
- *                     erro_banco:
- *                       summary: Erro no banco de dados
- *                       value: "Erro ao consultar o banco"
- *                     sem_registros:
- *                       summary: Sem registros
- *                       value: "Não há nenhum resultado!"
- */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/**
- * @swagger
- * /apiDados/perguntasCertas:
- *   get:
- *     summary: Top 5 perguntas certas
- *     tags: [Dados Estatísticos]
+ *     summary: Retorna as 5 perguntas mais acertadas
+ *     tags: [API Dados]
  *     responses:
  *       200:
  *         description: Lista das 5 perguntas mais acertadas
@@ -156,23 +43,67 @@ const router = express.Router();
  *               items:
  *                 type: object
  *                 properties:
- *                   pergunta:
+ *                   texto:
  *                     type: string
- *                     example: "Qual é o maior planeta do sistema solar?"
- *                   quantidadeAcertos:
+ *                     description: Texto da pergunta
+ *                   acerto:
  *                     type: integer
- *                     example: 30
+ *                     description: Número de acertos
+ *       400:
+ *         description: Erro ao consultar o banco ou dados ausentes
  */
 
 /**
  * @swagger
  * /apiDados/pessoasCertificado:
  *   get:
- *     summary: Pessoas com certificado
- *     tags: [Dados Estatísticos]
+ *     summary: Retorna a quantidade de pessoas com certificado
+ *     tags: [API Dados]
  *     responses:
  *       200:
- *         description: Lista de pessoas que possuem certificados
+ *         description: Quantidade de pessoas com certificado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 Quantidade_de_usuarios:
+ *                   type: integer
+ *                   description: Quantidade de pessoas com certificado
+ *       400:
+ *         description: Erro ao consultar o banco ou dados ausentes
+ */
+
+/**
+ * @swagger
+ * /apiDados/quantidadeCertificado:
+ *   get:
+ *     summary: Retorna a quantidade total de certificados emitidos
+ *     tags: [API Dados]
+ *     responses:
+ *       200:
+ *         description: Quantidade de certificados emitidos
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 Quantidade_de_certificados:
+ *                   type: integer
+ *                   description: Total de certificados emitidos
+ *       400:
+ *         description: Erro ao consultar o banco ou dados ausentes
+ */
+
+/**
+ * @swagger
+ * /apiDados/mediaNotas:
+ *   get:
+ *     summary: Retorna a média das porcentagens concluídas
+ *     tags: [API Dados]
+ *     responses:
+ *       200:
+ *         description: Lista de porcentagens concluídas
  *         content:
  *           application/json:
  *             schema:
@@ -180,89 +111,53 @@ const router = express.Router();
  *               items:
  *                 type: object
  *                 properties:
- *                   nome:
- *                     type: string
- *                     example: "João Silva"
- *                   certificado:
- *                     type: string
- *                     example: "Certificado de Conclusão"
- */
-
-/**
- * @swagger
- * /apiDados/quantidadeCertificado:
- *   get:
- *     summary: Quantidade total de certificados
- *     tags: [Dados Estatísticos]
- *     responses:
- *       200:
- *         description: Total de certificados emitidos
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 totalCertificados:
- *                   type: integer
- *                   example: 150
- */
-
-/**
- * @swagger
- * /apiDados/mediaNotas:
- *   get:
- *     summary: Média de notas
- *     tags: [Dados Estatísticos]
- *     responses:
- *       200:
- *         description: Média de notas obtida pelos usuários
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 media:
- *                   type: number
- *                   format: float
- *                   example: 8.5
- */
-
-/**
- * @swagger
- * /apiDados/totalModulos:
- *   get:
- *     summary: Total de módulos
- *     tags: [Dados Estatísticos]
- *     responses:
- *       200:
- *         description: Número total de módulos disponíveis
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 totalModulos:
- *                   type: integer
- *                   example: 20
+ *                   PORCENTAGEM_CONCLUIDO:
+ *                     type: number
+ *                     description: Porcentagem de conclusão
+ *       400:
+ *         description: Erro ao consultar o banco ou dados ausentes
  */
 
 /**
  * @swagger
  * /apiDados/moduloIniciado:
  *   get:
- *     summary: Total de módulos iniciados
- *     tags: [Dados Estatísticos]
+ *     summary: Retorna a quantidade de módulos iniciados
+ *     tags: [API Dados]
  *     responses:
  *       200:
- *         description: Número total de módulos que foram iniciados pelos usuários
+ *         description: Quantidade de módulos iniciados
  *         content:
  *           application/json:
  *             schema:
  *               type: object
  *               properties:
- *                 modulosIniciados:
+ *                 Iniciado_modulos:
  *                   type: integer
- *                   example: 15
+ *                   description: Quantidade de módulos iniciados
+ *       400:
+ *         description: Erro ao consultar o banco ou dados ausentes
+ */
+
+/**
+ * @swagger
+ * /apiDados/totalModulos:
+ *   get:
+ *     summary: Retorna o total de módulos ativos
+ *     tags: [API Dados]
+ *     responses:
+ *       200:
+ *         description: Total de módulos ativos
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 Total_modulos:
+ *                   type: integer
+ *                   description: Quantidade total de módulos
+ *       400:
+ *         description: Erro ao consultar o banco ou dados ausentes
  */
 
 router.get('/perguntasErradas', perguntasErradas); //top 5 perguntas erradas;
