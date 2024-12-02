@@ -23,24 +23,30 @@ Este projeto é o back end de um aplicativo chamado motociclista consciente, que
 1. Clone este repositório:
    ```bash
    git clone https://github.com/seu-usuario/nome-do-repositorio.git
+
    
 2. Entre no diretório do projeto:
    ```bash
    cd nome-do-repositorio
     ```
+
+   
 3. Instale as dependências:
 ```bash
   npm install
 ```
+
 
 6. Instalar para rodar o Swagger:
 ```bash
 npm install swagger-jsdoc swagger-ui-express
 ```
 
+
 5. Inicie o servidor:
    ```bash
    node server.js
+   
 
 ## **Endpoints Principais**
 ###Método	Rota	Descrição
@@ -54,7 +60,7 @@ GET	/api-docs	Acessar a documentação Swagger
 Consulte a documentação completa no Swagger: http://localhost:3000/api-docs.
 ```
 
-## **Estrutura de pastas**
+ **Estrutura de pastas**
 ```bash
 📂 Back-End-CMTU-Node-js
 ├──📂 controllers
