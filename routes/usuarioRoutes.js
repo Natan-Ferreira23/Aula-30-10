@@ -1,14 +1,13 @@
 const express = require('express');
-const { cadastrar, login, editarSenha, editarNomeEmail, selecionarUsuario, selecionarTodosUsuarios, desativarUsuario, ativarUsuario, mudarAdmin } = require('../controllers/usuarioController');
+const { cadastrar, login, editarSenha, editarNome, editarEmail, selecionarUsuario, selecionarTodosUsuarios, desativarUsuario, ativarUsuario } = require('../controllers/usuarioController');
 //const verificarToken = require('../middlewares/authMiddleware');
 
 const router = express.Router();
-
 /**
  * @swagger
  * /usuario/cadastro:
  *   post:
- *     summary: Cadastrar um novo usuário
+ *     summary: Cadastra um novo usuário
  *     tags: [Usuário]
  *     requestBody:
  *       required: true
@@ -19,25 +18,25 @@ const router = express.Router();
  *             properties:
  *               nome:
  *                 type: string
- *                 example: "João Silva"
+ *                 description: Nome do usuário
  *               email:
  *                 type: string
- *                 example: "joao.silva@gmail.com"
+ *                 description: Email do usuário
  *               senha:
  *                 type: string
- *                 example: "senha123"
+ *                 description: Senha do usuário
  *     responses:
- *       201:
+ *       200:
  *         description: Usuário cadastrado com sucesso
  *       400:
- *         description: Erro ao cadastrar o usuário
+ *         description: Dados inválidos ou usuário já existente
  */
 
 /**
  * @swagger
  * /usuario/login:
  *   post:
- *     summary: Fazer login do usuário
+ *     summary: Realiza login do usuário
  *     tags: [Usuário]
  *     requestBody:
  *       required: true
@@ -48,71 +47,22 @@ const router = express.Router();
  *             properties:
  *               email:
  *                 type: string
- *                 example: "joao.silva@gmail.com"
+ *                 description: Email do usuário
  *               senha:
  *                 type: string
- *                 example: "senha123"
+ *                 description: Senha do usuário
  *     responses:
  *       200:
  *         description: Login realizado com sucesso
- *       401:
- *         description: Credenciais inválidas
+ *       400:
+ *         description: Email ou senha incorretos
  */
 
 /**
  * @swagger
  * /usuario/editarSenha:
  *   put:
- *     summary: Editar senha do usuário
- *     tags: [Usuário]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               senhaAtual:
- *                 type: string
- *                 example: "senha123"
- *               novaSenha:
- *                 type: string
- *                 example: "novaSenha456"
- *     responses:
- *       200:
- *         description: Senha atualizada com sucesso
- *       400:
- *         description: Erro ao atualizar a senha
- */
-
-/**
- * @swagger
- * /usuario/editarNome:
- *   put:
- *     summary: Editar nome do usuário
- *     tags: [Usuário]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               nome:
- *                 type: string
- *                 example: "João da Silva"
- *     responses:
- *       200:
- *         description: Nome atualizado com sucesso
- *       400:
- *         description: Erro ao atualizar o nome
- */
-
-/**
- * @swagger
- * /usuario/editarEmail:
- *   put:
- *     summary: Editar e-mail do usuário
+ *     summary: Edita a senha de um usuário
  *     tags: [Usuário]
  *     requestBody:
  *       required: true
@@ -123,19 +73,48 @@ const router = express.Router();
  *             properties:
  *               email:
  *                 type: string
- *                 example: "joao.novoemail@gmail.com"
+ *                 description: Email do usuário
+ *               senhaNova:
+ *                 type: string
+ *                 description: Nova senha
  *     responses:
  *       200:
- *         description: E-mail atualizado com sucesso
+ *         description: Senha alterada com sucesso
  *       400:
- *         description: Erro ao atualizar o e-mail
+ *         description: Email não encontrado ou erro no banco
+ */
+
+/**
+ * @swagger
+ * /usuario/editarNome:
+ *   put:
+ *     summary: Edita o nome de um usuário
+ *     tags: [Usuário]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 description: Email do usuário
+ *               nome:
+ *                 type: string
+ *                 description: Novo nome do usuário
+ *     responses:
+ *       200:
+ *         description: Nome alterado com sucesso
+ *       400:
+ *         description: Email não encontrado ou erro no banco
  */
 
 /**
  * @swagger
  * /usuario/selecionarUsuario:
  *   get:
- *     summary: Selecionar um usuário pelo ID
+ *     summary: Retorna os dados de um usuário pelo ID
  *     tags: [Usuário]
  *     parameters:
  *       - in: query
@@ -143,37 +122,23 @@ const router = express.Router();
  *         required: true
  *         schema:
  *           type: integer
- *         description: ID do usuário a ser selecionado
+ *         description: ID do usuário
  *     responses:
  *       200:
  *         description: Dados do usuário retornados com sucesso
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 id:
- *                   type: integer
- *                   example: 1
- *                 nome:
- *                   type: string
- *                   example: "João Silva"
- *                 email:
- *                   type: string
- *                   example: "joao.silva@gmail.com"
- *       404:
- *         description: Usuário não encontrado
+ *       400:
+ *         description: Usuário não encontrado ou erro no banco
  */
 
 /**
  * @swagger
  * /usuario/selecionarUsuarios:
  *   get:
- *     summary: Selecionar todos os usuários
+ *     summary: Retorna a lista de todos os usuários ativos
  *     tags: [Usuário]
  *     responses:
  *       200:
- *         description: Lista de todos os usuários cadastrados
+ *         description: Lista de usuários ativos
  *         content:
  *           application/json:
  *             schema:
@@ -181,74 +146,28 @@ const router = express.Router();
  *               items:
  *                 type: object
  *                 properties:
- *                   id:
+ *                   id_usuario:
  *                     type: integer
- *                     example: 1
- *                   nome:
- *                     type: string
- *                     example: "João Silva"
+ *                     description: ID do usuário
  *                   email:
  *                     type: string
- *                     example: "joao.silva@gmail.com"
- *                   status:
+ *                     description: Email do usuário
+ *                   nome:
  *                     type: string
- *                     example: "ativo"
- */
-
-/**
- * @swagger
- * /usuario/desativarUsuario:
- *   put:
- *     summary: Desativar um usuário
- *     tags: [Usuário]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               id:
- *                 type: integer
- *                 example: 1
- *     responses:
- *       200:
- *         description: Usuário desativado com sucesso
+ *                     description: Nome do usuário
  *       400:
- *         description: Erro ao desativar o usuário
- */
-
-/**
- * @swagger
- * /usuario/ativarUsuario:
- *   put:
- *     summary: Ativar um usuário
- *     tags: [Usuário]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               id:
- *                 type: integer
- *                 example: 1
- *     responses:
- *       200:
- *         description: Usuário ativado com sucesso
- *       400:
- *         description: Erro ao ativar o usuário
+ *         description: Não há usuários registrados ou erro no banco
  */
 
 router.post('/cadastro', cadastrar);
 router.post('/login', login);
-router.post('/editarNomeEmail', editarNomeEmail);
 router.put('/editarSenha', editarSenha);
+router.put('/editarNome', editarNome);
+router.put('/editarEmail', editarEmail);
 router.get('/selecionarUsuario', selecionarUsuario);
 router.get('/selecionarUsuarios', selecionarTodosUsuarios);
 router.put('/desativarUsuario', desativarUsuario);
 router.put('/ativarUsuario', ativarUsuario);
-router.post('/mudarAdmin', mudarAdmin);
+
 
 module.exports = router;
