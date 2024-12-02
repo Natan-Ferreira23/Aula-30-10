@@ -49,7 +49,7 @@ npm install swagger-jsdoc swagger-ui-express
    
 
 ## **Endpoints Principais**
-###Método	Rota	Descrição
+### Método	Rota	Descrição
 ```bash
 POST	/usuario/cadastro	Cadastrar um novo usuário
 POST	/usuario/login	Realiza login do usuário
