@@ -7,10 +7,10 @@ const swaggerOptions = {
         info: {
             title: 'API Documentation',
             version: '1.0.0',
-            description: 'API para gerenciar usuários e outras funcionalidades.',
+            description: 'Documentação API do projeto CMTU.',
         },
         servers: [
-            { url: 'http://localhost:8079' }
+            { url: 'http://localhost:3000' }
         ],
     },
     apis: ['./routes/*.js'],
