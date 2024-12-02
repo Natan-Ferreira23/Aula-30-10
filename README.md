@@ -27,9 +27,9 @@ Este projeto é o back end de um aplicativo chamado motociclista consciente, que
 2. Entre no diretório do projeto:
    ```bash
    cd nome-do-repositorio
-    
+    ```
 3. Instale as dependências:
-   ```bash
+```bash
   npm install
 ```
 
@@ -41,7 +41,7 @@ npm install swagger-jsdoc swagger-ui-express
 5. Inicie o servidor:
    ```bash
    node server.js
-```
+
 ## **Endpoints Principais**
 ###Método	Rota	Descrição
 ```bash
