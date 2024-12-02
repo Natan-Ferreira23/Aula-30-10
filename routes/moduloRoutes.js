@@ -1,15 +1,14 @@
 const express = require('express');
-const { cadastrar, editarNome, editarModulo, selecionarTodosModulos, selecionarTodosModulosAtivados, desativarModulo, ativarModulo } = require('../controllers/moduloController');
+const { cadastrar, editarNome, selecionarTodosModulos, desativarModulo, ativarModulo } = require('../controllers/moduloController');
 
 //const verificarToken = require('../middlewares/authMiddleware');
 
 const router = express.Router();
-
 /**
  * @swagger
  * /modulo/cadastro:
  *   post:
- *     summary: Cadastrar um novo módulo
+ *     summary: Cadastra um novo módulo
  *     tags: [Módulo]
  *     requestBody:
  *       required: true
@@ -20,22 +19,22 @@ const router = express.Router();
  *             properties:
  *               nome:
  *                 type: string
- *                 example: "Módulo de Introdução"
- *               descricao:
- *                 type: string
- *                 example: "Este módulo cobre os conceitos básicos do curso"
+ *                 description: Nome do módulo
+ *               porcentagem:
+ *                 type: number
+ *                 description: Porcentagem necessária para aprovação
  *     responses:
- *       201:
+ *       200:
  *         description: Módulo cadastrado com sucesso
  *       400:
- *         description: Erro ao cadastrar o módulo
+ *         description: Dados inválidos ou erro no banco
  */
 
 /**
  * @swagger
  * /modulo/editarNome:
  *   put:
- *     summary: Editar o nome de um módulo existente
+ *     summary: Edita o nome de um módulo
  *     tags: [Módulo]
  *     requestBody:
  *       required: true
@@ -46,22 +45,22 @@ const router = express.Router();
  *             properties:
  *               id:
  *                 type: integer
- *                 example: 1
+ *                 description: ID do módulo a ser editado
  *               nome:
  *                 type: string
- *                 example: "Módulo Avançado"
+ *                 description: Novo nome para o módulo
  *     responses:
  *       200:
- *         description: Nome do módulo editado com sucesso
+ *         description: Nome do módulo alterado com sucesso
  *       400:
- *         description: Erro ao editar o nome do módulo
+ *         description: Módulo não encontrado ou erro no banco
  */
 
 /**
  * @swagger
  * /modulo/desativarModulo:
  *   put:
- *     summary: Desativar um módulo
+ *     summary: Desativa um módulo
  *     tags: [Módulo]
  *     requestBody:
  *       required: true
@@ -72,19 +71,19 @@ const router = express.Router();
  *             properties:
  *               id:
  *                 type: integer
- *                 example: 1
+ *                 description: ID do módulo a ser desativado
  *     responses:
  *       200:
  *         description: Módulo desativado com sucesso
  *       400:
- *         description: Erro ao desativar o módulo
+ *         description: Módulo não encontrado ou erro no banco
  */
 
 /**
  * @swagger
  * /modulo/ativarModulo:
  *   put:
- *     summary: Ativar um módulo
+ *     summary: Ativa um módulo desativado
  *     tags: [Módulo]
  *     requestBody:
  *       required: true
@@ -95,23 +94,23 @@ const router = express.Router();
  *             properties:
  *               id:
  *                 type: integer
- *                 example: 1
+ *                 description: ID do módulo a ser ativado
  *     responses:
  *       200:
  *         description: Módulo ativado com sucesso
  *       400:
- *         description: Erro ao ativar o módulo
+ *         description: Módulo não encontrado ou erro no banco
  */
 
 /**
  * @swagger
  * /modulo/selecionarModulos:
  *   get:
- *     summary: Selecionar todos os módulos
+ *     summary: Lista todos os módulos ativos
  *     tags: [Módulo]
  *     responses:
  *       200:
- *         description: Lista de todos os módulos cadastrados
+ *         description: Lista de módulos
  *         content:
  *           application/json:
  *             schema:
@@ -119,29 +118,25 @@ const router = express.Router();
  *               items:
  *                 type: object
  *                 properties:
- *                   id:
+ *                   id_modulo:
  *                     type: integer
- *                     example: 1
- *                   nome:
+ *                     description: ID do módulo
+ *                   nome_modulo:
  *                     type: string
- *                     example: "Módulo Básico"
- *                   descricao:
- *                     type: string
- *                     example: "Introdução aos conceitos básicos"
- *                   status:
- *                     type: string
- *                     example: "ativo"
+ *                     description: Nome do módulo
+ *                   porcentagem_necessaria:
+ *                     type: number
+ *                     description: Porcentagem necessária para aprovação
  *       400:
- *         description: Erro ao buscar os módulos
+ *         description: Não há módulos registrados ou erro no banco
  */
+
 
 router.post('/cadastro', cadastrar);
 router.put('/editarNome', editarNome);
-router.post('/editarModulo', editarModulo);
 router.put("/desativarModulo", desativarModulo);
 router.put("/ativarModulo", ativarModulo);
 router.get('/selecionarModulos', selecionarTodosModulos);
-router.get('/selecionarTodosModulosAtivados', selecionarTodosModulosAtivados);
 
 
 module.exports = router;
