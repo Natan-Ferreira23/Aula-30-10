@@ -1,12 +1,12 @@
 const express = require('express');
-const { cadastrar, editarAtividade, desativarAtividade, ativarAtividade, selecionarAtividades, acertar, errar } = require("../controllers/atividadeController");
+const { cadastrar, editarCertificado, desativarCertificado, ativarCertificado, selecionarCertificados } = require("../controllers/certificadoController");
 const router = express.Router();
 /**
  * @swagger
- * /atividade/cadastro:
+ * /certificado/cadastro:
  *   post:
- *     summary: Cadastra uma nova atividade
- *     tags: [Atividade]
+ *     summary: Cadastra um novo certificado
+ *     tags: [Certificado]
  *     requestBody:
  *       required: true
  *       content:
@@ -14,31 +14,28 @@ const router = express.Router();
  *           schema:
  *             type: object
  *             properties:
- *               respostaCerta:
+ *               dataConclusao:
  *                 type: string
- *                 description: Resposta correta da atividade
- *               nome:
- *                 type: string
- *                 description: Nome da atividade
- *               texto:
- *                 type: string
- *                 description: Texto da atividade
- *               idModulo:
+ *                 description: Data de conclusão no formato DD/MM/YYYY
+ *               horas:
  *                 type: integer
- *                 description: ID do módulo associado
+ *                 description: Quantidade de horas
+ *               idUsuario:
+ *                 type: integer
+ *                 description: ID do usuário associado
  *     responses:
  *       200:
- *         description: Atividade cadastrada com sucesso
+ *         description: Certificado cadastrado com sucesso
  *       400:
  *         description: Dados inválidos ou erro no banco
  */
 
 /**
  * @swagger
- * /atividade/editarAtividade:
+ * /certificado/editarCertificado:
  *   put:
- *     summary: Edita uma atividade existente
- *     tags: [Atividade]
+ *     summary: Edita um certificado existente
+ *     tags: [Certificado]
  *     requestBody:
  *       required: true
  *       content:
@@ -46,34 +43,28 @@ const router = express.Router();
  *           schema:
  *             type: object
  *             properties:
- *               idAtividade:
+ *               id:
  *                 type: integer
- *                 description: ID da atividade a ser editada
- *               respostaCerta:
+ *                 description: ID do certificado a ser editado
+ *               dataConclusao:
  *                 type: string
- *                 description: Nova resposta correta
- *               nome:
- *                 type: string
- *                 description: Novo nome da atividade
- *               texto:
- *                 type: string
- *                 description: Novo texto da atividade
- *               idModulo:
+ *                 description: Nova data de conclusão no formato DD/MM/YYYY
+ *               horas:
  *                 type: integer
- *                 description: Novo ID do módulo associado
+ *                 description: Nova quantidade de horas
  *     responses:
  *       200:
- *         description: Atividade editada com sucesso
+ *         description: Certificado editado com sucesso
  *       400:
- *         description: Atividade não encontrada ou erro no banco
+ *         description: Certificado não encontrado ou erro no banco
  */
 
 /**
  * @swagger
- * /atividade/desativarAtividade:
+ * /certificado/desativarCertificado:
  *   put:
- *     summary: Desativa uma atividade
- *     tags: [Atividade]
+ *     summary: Desativa um certificado
+ *     tags: [Certificado]
  *     requestBody:
  *       required: true
  *       content:
@@ -81,22 +72,22 @@ const router = express.Router();
  *           schema:
  *             type: object
  *             properties:
- *               idAtividade:
+ *               id:
  *                 type: integer
- *                 description: ID da atividade a ser desativada
+ *                 description: ID do certificado a ser desativado
  *     responses:
  *       200:
- *         description: Atividade desativada com sucesso
+ *         description: Certificado desativado com sucesso
  *       400:
- *         description: Atividade não encontrada ou erro no banco
+ *         description: Certificado não encontrado ou erro no banco
  */
 
 /**
  * @swagger
- * /atividade/ativarAtividade:
+ * /certificado/ativarCertificado:
  *   put:
- *     summary: Ativa uma atividade desativada
- *     tags: [Atividade]
+ *     summary: Ativa um certificado desativado
+ *     tags: [Certificado]
  *     requestBody:
  *       required: true
  *       content:
@@ -104,25 +95,25 @@ const router = express.Router();
  *           schema:
  *             type: object
  *             properties:
- *               idAtividade:
+ *               id:
  *                 type: integer
- *                 description: ID da atividade a ser ativada
+ *                 description: ID do certificado a ser ativado
  *     responses:
  *       200:
- *         description: Atividade ativada com sucesso
+ *         description: Certificado ativado com sucesso
  *       400:
- *         description: Atividade não encontrada ou erro no banco
+ *         description: Certificado não encontrado ou erro no banco
  */
 
 /**
  * @swagger
- * /atividade/selecionarAtividades:
+ * /certificado/selecionarCertificados:
  *   get:
- *     summary: Lista todas as atividades ativas
- *     tags: [Atividade]
+ *     summary: Lista todos os certificados ativos
+ *     tags: [Certificado]
  *     responses:
  *       200:
- *         description: Lista de atividades
+ *         description: Lista de certificados
  *         content:
  *           application/json:
  *             schema:
@@ -130,70 +121,26 @@ const router = express.Router();
  *               items:
  *                 type: object
  *                 properties:
- *                   id_atividade:
+ *                   id_certificado:
  *                     type: integer
- *                     description: ID da atividade
- *                   nome:
+ *                     description: ID do certificado
+ *                   data_conclusao:
  *                     type: string
- *                     description: Nome da atividade
- *                   texto:
- *                     type: string
- *                     description: Texto da atividade
+ *                     description: Data de conclusão do certificado
+ *                   horas:
+ *                     type: integer
+ *                     description: Quantidade de horas do certificado
+ *                   id_usuario:
+ *                     type: integer
+ *                     description: ID do usuário associado ao certificado
  *       400:
- *         description: Não há atividades registradas ou erro no banco
- */
-
-/**
- * @swagger
- * /atividade/acertar:
- *   post:
- *     summary: Marca uma atividade como acertada
- *     tags: [Atividade]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               id:
- *                 type: integer
- *                 description: ID da atividade acertada
- *     responses:
- *       200:
- *         description: Acerto registrado com sucesso
- *       400:
- *         description: Atividade não encontrada ou erro no banco
- */
-
-/**
- * @swagger
- * /atividade/errar:
- *   post:
- *     summary: Marca uma atividade como errada
- *     tags: [Atividade]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               id:
- *                 type: integer
- *                 description: ID da atividade errada
- *     responses:
- *       200:
- *         description: Erro registrado com sucesso
- *       400:
- *         description: Atividade não encontrada ou erro no banco
+ *         description: Não há certificados registrados ou erro no banco
  */
 
 router.post('/cadastro', cadastrar);
-router.put('/editarAtividade', editarAtividade);
-router.put('/desativarAtividade', desativarAtividade);
-router.put('/ativarAtividade', ativarAtividade);
-router.get('/selecionarAtividades', selecionarAtividades);
-router.post('/acertar', acertar);
-router.post('/errar', errar);
+router.put('/editarCertificado', editarCertificado);
+router.put('/desativarCertificado', desativarCertificado);
+router.put("/ativarCertificado", ativarCertificado);
+router.get("/selecionarCertificados", selecionarCertificados)
+
 module.exports = router;
