@@ -7,17 +7,17 @@ const cadastrar = (req, res) => {
 
     const inserir = "INSERT INTO usuario_modulo (fk_modulo_id_modulo, fk_usuario_id_usuario) VALUES (?,?)"
 
-    if (!idModulo) {
+    if (!idModulo){
         return res.status(400).json({ mensagem: "É necessário id do modulo" });
-    }
-    if (!idUsuario) {
+    } 
+    if (!idUsuario){
         return res.status(400).json({ mensagem: "É necessário id do usuário " });
-    }
+    } 
 
     db.query(inserir, [idModulo, idUsuario], (err, results) => {
-        if (err) {
+        if (err){
             return res.status(400).json({ mensagem: "Erro ao consultar o banco!" });
-        }
+        } 
 
         return res.status(200).json({ mensagem: "usuario_modulo inserido com sucesso !" });
     });
@@ -59,56 +59,59 @@ const cadastrarRelacaoUsuariosModulos = (req, res) => {
 //localhost:8079/usuarioModulo/editarUsuarioModulo
 const editarUsuarioModulo = (req, res) => {
 
-    const { aprovado, iniciado, notaFinal, id } = req.body;
+    const { aprovado, iniciado, nota_final, id } = req.body;
+    
 
-    const verificar = "SELECT * FROM usuario_modulo WHERE id_usuario_modulo = ? ";
     const editar = "UPDATE usuario_modulo SET aprovado = ?, iniciado = ?, nota_final = ? WHERE id_usuario_modulo = ?";
-
-    if (!porcentagemConcluido) {
-        return res.status(400).json({ mensagem: "É necessário informar porcentagem concluida" });
-    }
-    if (!idModulo) {
+     
+    if (!id){
         return res.status(400).json({ mensagem: "É necessário id do modulo" });
-    }
-    if (!idUsuario) {
-        return res.status(400).json({ mensagem: "É necessário id do usuário " });
-    }
+    } 
 
-    db.query(verificar, [id, true], (err, results) => {
-        if (err) {
+    db.query(editar, [ aprovado, iniciado, nota_final, id ], (err, results) => {
+        if (err){
             return res.status(400).json({ mensagem: "Erro ao consultar o banco !" });
         }
-        if (results.length === 0) {
-            return res.status(400).json({ mensagem: "Não há registros com este id " });
-        }
-
-        db.query(editar, [aprovado, iniciado, notaFinal, id], (err, results) => {
-            if (err) {
-                return res.status(400).json({ mensagem: "Erro ao consultar o banco !" });
-            }
-            return res.status(200).json({ mensagem: "usuario_modulo editado com sucesso !" });
-        });
-    })
+        return res.status(200).json({ mensagem: "usuario_modulo editado com sucesso !" });
+    });
 }
 
 //localhost:8079/usuarioModulo/selecionarUsuariosModulos
 const selecionarUsuarioModulo = (req, res) => {
-
-    const selecionar = "SELECT * FROM usuario_modulo";
-
+    const selecionar = `
+      SELECT 
+        usuario_modulo.ID_USUARIO_MODULO AS id_usuario_modulo,
+        usuario_modulo.STATUS AS status,
+        usuario_modulo.APROVADO AS aprovado,
+        usuario_modulo.INICIADO AS iniciado,
+        usuario_modulo.NOTA_FINAL AS nota_final,
+        usuario_modulo.FK_MODULO_ID_MODULO AS fk_modulo_id_modulo,
+        usuario.NOME AS nome_usuario,
+        modulo.NOME AS nome_modulo
+      FROM 
+        USUARIO_MODULO usuario_modulo
+      INNER JOIN 
+        USUARIO usuario ON usuario_modulo.FK_USUARIO_ID_USUARIO = usuario.ID_USUARIO
+      INNER JOIN 
+        MODULO modulo ON usuario_modulo.FK_MODULO_ID_MODULO = modulo.ID_MODULO
+      ORDER BY 
+        usuario_modulo.ID_USUARIO_MODULO ASC; -- Ordena pelos IDs em ordem crescente
+    `;
+  
     db.query(selecionar, (err, results) => {
-        if (err) {
-            return res.status(400).json({ mensagem: "Erro ao coontultar o banco !" });
-        }
-        if (results.length === 0) {
-            return res.status(400).json({ mensagem: "Não há dados na tabela !" });
-        }
-
-        const usuarios_modulos = results;
-
-        return res.status(200).json(usuarios_modulos);
+      if (err) {
+        return res.status(400).json({ mensagem: "Erro ao consultar o banco!" });
+      }
+      if (results.length === 0) {
+        return res.status(400).json({ mensagem: "Não há dados na tabela!" });
+      }
+  
+      return res.status(200).json(results);
     });
-}
+  };
+  
+  module.exports = { selecionarUsuarioModulo };
+  
 
 //localhost:8079/usuarioModulo/iniciarModulo
 const iniciarModulo = (req, res) => {
@@ -119,17 +122,17 @@ const iniciarModulo = (req, res) => {
     const iniciar = "UPDATE usuario_modulo SET iniciado = true WHERE id_usuario_modulo = ?";
 
     db.query(verificar, [id, true], (err, results) => {
-        if (err) {
+        if (err){
             return res.status(400).json({ mensagem: "Erro ao consultar o banco" });
-        }
-        if (results.length === 0) {
+        } 
+        if (results.length === 0){
             return res.status(400).json({ mensagem: "Não há registros" });
-        }
+        } 
 
         db.query(iniciar, [id], (err, results) => {
-            if (err) {
+            if (err){
                 return res.status(400).json({ mensagem: "Erro ao consultar o banco" });
-            }
+            } 
 
             return res.status(200).json({ mensagem: "Modulo iniciado " });
         });
@@ -147,7 +150,7 @@ const ativarUsuarioModulo = (req, res) => {
     }
 
     db.query(ativarUsuarioModulo, [id], (err, results) => {
-        if (err) {
+        if (err){
             return res.status(400).json({ mensagem: "Erro ao consultar o banco de dados." });
         }
 
@@ -183,7 +186,7 @@ const atualizarIniciado = (req, res) => {
     if (!idModulo || !idUsuario) {
         return res.status(400).json({ mensagem: "É necessário id do modulo e id do usuario!" });
     }
-
+    
     db.query(atualizar, [idModulo, idUsuario], (err, results) => {
         if (err) {
             return res.status(500).json({ mensagem: "Erro ao atualizar o módulo!" });
@@ -192,6 +195,90 @@ const atualizarIniciado = (req, res) => {
     });
 };
 
+//http://localhost:3000/usuarioModulo/listarModulosPorUsuario
+const listarModulosPorUsuario = (req, res) => {
+    const { idUsuario } = req.query;
 
+    if (!idUsuario) {
+        return res.status(400).json({ mensagem: "É necessário fornecer o id do usuário." });
+    }
 
-module.exports = { cadastrar, cadastrarRelacaoUsuariosModulos, editarUsuarioModulo, selecionarUsuarioModulo, iniciarModulo, ativarUsuarioModulo, desativarUsuarioModulo, atualizarIniciado }
+    const query = `
+        SELECT m.id_modulo, m.nome, m.porcentagem_necessaria, m.status
+        FROM usuario_modulo um
+        JOIN modulo m ON um.fk_modulo_id_modulo = m.id_modulo
+        WHERE um.fk_usuario_id_usuario = ?
+            AND um.status = 1
+            AND um.aprovado = 0
+            AND m.status = 1
+    `;
+
+    db.query(query, [idUsuario], (err, results) => {
+        if (err) {
+            return res.status(500).json({ mensagem: "Erro ao buscar os módulos.", erro: err });
+        }
+
+        res.status(200).json(results);
+    });
+};
+
+// http://localhost:3000/usuarioModulo/verificarAprovacao
+const verificarAprovacao = (req, res) => {
+    const { idUsuario } = req.query;
+
+    if (!idUsuario) {
+        return res.status(400).json({ mensagem: "É necessário fornecer o id do usuário." });
+    }
+
+    const query = `
+        SELECT COUNT(*) AS total, 
+               SUM(CASE WHEN aprovado = 1 THEN 1 ELSE 0 END) AS aprovados
+        FROM usuario_modulo
+        WHERE fk_usuario_id_usuario = ?
+    `;
+
+    db.query(query, [idUsuario], (err, results) => {
+        if (err) {
+            return res.status(500).json({ mensagem: "Erro ao verificar aprovação.", erro: err });
+        }
+
+        const { total, aprovados } = results[0];
+        
+        if (total === 0) {
+            return res.status(404).json({ mensagem: "Nenhum vínculo encontrado para o usuário." });
+        }
+
+        const todosAprovados = total === aprovados;
+
+        res.status(200).json({ status: todosAprovados ? 1 : 0 });
+    });
+};
+
+const definirNotaAprovado = (req, res) => {
+    
+    const { nota_final, idUsuario, idModulo } = req.body;
+
+    const sql = "UPDATE USUARIO_MODULO SET APROVADO = true, NOTA_FINAL = ? WHERE FK_USUARIO_ID_USUARIO = ? AND FK_MODULO_ID_MODULO = ?";
+
+    db.query(sql, [nota_final, idUsuario, idModulo], (err, results) => {
+        if (err) {
+            return res.status(500).json({ mensagem: 'Erro ao atualizar a nota!' });
+        }
+        return res.status(200).json({ mensagem: 'Dados atualizados com sucesso!' });
+    });
+};
+
+const definirNota = (req, res) => {
+    const { nota_final, idUsuario, idModulo } = req.body;
+
+    const sql = "UPDATE USUARIO_MODULO SET NOTA_FINAL = ? WHERE FK_USUARIO_ID_USUARIO = ? AND FK_MODULO_ID_MODULO = ?";
+
+    db.query(sql, [nota_final, idUsuario, idModulo], (err, results) => {
+        if (err) {
+            return res.status(500).json({ mensagem: 'Erro ao atualizar a nota!' });
+        }
+        return res.status(200).json({ mensagem: 'Dados atualizados com sucesso!' });
+    });
+}
+
+module.exports = { cadastrar, cadastrarRelacaoUsuariosModulos, editarUsuarioModulo, selecionarUsuarioModulo, iniciarModulo, ativarUsuarioModulo, desativarUsuarioModulo, atualizarIniciado, listarModulosPorUsuario, verificarAprovacao, definirNotaAprovado, definirNota }

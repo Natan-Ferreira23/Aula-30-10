@@ -23,70 +23,37 @@ Este projeto é o back end de um aplicativo chamado motociclista consciente, que
 1. Clone este repositório:
    ```bash
    git clone https://github.com/seu-usuario/nome-do-repositorio.git
-
    
 2. Entre no diretório do projeto:
    ```bash
    cd nome-do-repositorio
-    ```
-
-   
-3. Instale as dependências:
-```bash
+    
+3.Instale as dependências:
+   ```bash
   npm install
-```
 
-
-6. Instalar para rodar o Swagger:
-```bash
-npm install swagger-jsdoc swagger-ui-express
-```
-
-
-5. Inicie o servidor:
+4.Inicie o servidor:
    ```bash
    node server.js
-   
 
-## **Endpoints Principais**
-### Método	Rota	Descrição
-```bash
+Endpoints Principais
+Método	Rota	Descrição
 POST	/usuario/cadastro	Cadastrar um novo usuário
-POST	/usuario/login	Realiza login do usuário
-PUT     /usuario/editarNome Edita o nome de um usuário
+POST	/usuario/login	Realizar login
+GET	/usuario/selecionarUsuarios	Listar todos os usuários
 PUT	/usuario/editarSenha	Alterar a senha do usuário
-GET     /usuario/selecionarUsuario  Retorna os dados de um usuário pelo ID
 GET	/api-docs	Acessar a documentação Swagger
-Consulte a documentação completa no Swagger: http://localhost:3000/api-docs.
-```
+Consulte a documentação completa no Swagger: http://localhost:8079/api-docs.
 
- **Estrutura de pastas**
-```bash
-📂 Back-End-CMTU-Node-js
-├──📂 controllers
-	├──alternativaController.js
-	├──apiDadosController.js
-	├──atividadeController.js
-	├──certificadoController.js
-	├──moduloController.js
-	├──usuarioController.js
-	├──usuario_moduloController.js    
-├──📂 database
-	├──db.js
-	├──sqlDodB.db
-├──📂 middlewares 
-	├──authMiddleware.js
-├──📂 routes 
-	├──alternativaRoutes.js    
-	├──apiDadosRoutes.js
-	├──atividadeRoutes.js
-	├──certificadoRoutes.js
-	├──moduloRoutes.js
-	├──usuarioRoutes.js
-	├──usuario_moduloRoutes.js  
-├── server.js          
-├── swagger.js         
-└── package.json       
+Estrutura do Projeto
+📂 nome-do-projeto
+├── 📂 controllers     # Lógica dos endpoints
+├── 📂 routes          # Definição das rotas
+├── 📂 database        # Configuração do banco de dados
+├── 📂 middlewares     # Middleware de autenticação e validação
+├── server.js          # Configuração do servidor
+├── swagger.js         # Configuração do Swagger
+└── package.json       # Gerenciamento de dependências
 
 
 

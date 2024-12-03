@@ -1,14 +1,15 @@
 const express = require('express');
-const { cadastrar, editarUsuarioModulo, selecionarUsuarioModulo, iniciarModulo } = require('../controllers/usuario_moduloController');
+const { cadastrar, cadastrarRelacaoUsuariosModulos, editarUsuarioModulo, selecionarUsuarioModulo, iniciarModulo, ativarUsuarioModulo, desativarUsuarioModulo, atualizarIniciado, listarModulosPorUsuario, verificarAprovacao, definirNotaAprovado, definirNota } = require('../controllers/usuario_moduloController');
 //const verificarToken = require('../middlewares/authMiddleware');
 
 const router = express.Router();
+
 /**
  * @swagger
  * /usuarioModulo/cadastro:
  *   post:
- *     summary: Cadastra um novo vínculo entre usuário e módulo
- *     tags: [Usuário-Módulo]
+ *     summary: Cadastrar um novo vínculo entre usuário e módulo
+ *     tags: [Usuário Módulo]
  *     requestBody:
  *       required: true
  *       content:
@@ -16,28 +17,25 @@ const router = express.Router();
  *           schema:
  *             type: object
  *             properties:
- *               porcentagemConcluido:
- *                 type: number
- *                 description: Porcentagem concluída no módulo
- *               idModulo:
+ *               usuarioId:
  *                 type: integer
- *                 description: ID do módulo
- *               idUsuario:
+ *                 example: 101
+ *               moduloId:
  *                 type: integer
- *                 description: ID do usuário
+ *                 example: 202
  *     responses:
- *       200:
- *         description: Vínculo criado com sucesso
+ *       201:
+ *         description: Vínculo entre usuário e módulo cadastrado com sucesso
  *       400:
- *         description: Dados inválidos ou erro no banco
+ *         description: Erro ao cadastrar o vínculo
  */
 
 /**
  * @swagger
  * /usuarioModulo/editarUsuarioModulo:
  *   put:
- *     summary: Edita os dados de um vínculo entre usuário e módulo
- *     tags: [Usuário-Módulo]
+ *     summary: Editar informações do vínculo entre usuário e módulo
+ *     tags: [Usuário Módulo]
  *     requestBody:
  *       required: true
  *       content:
@@ -45,34 +43,31 @@ const router = express.Router();
  *           schema:
  *             type: object
  *             properties:
- *               id:
+ *               usuarioId:
  *                 type: integer
- *                 description: ID do vínculo a ser editado
- *               porcentagemConcluido:
- *                 type: number
- *                 description: Nova porcentagem concluída
- *               idModulo:
+ *                 example: 101
+ *               moduloId:
  *                 type: integer
- *                 description: Novo ID do módulo
- *               idUsuario:
+ *                 example: 202
+ *               progresso:
  *                 type: integer
- *                 description: Novo ID do usuário
+ *                 example: 50
  *     responses:
  *       200:
- *         description: Vínculo editado com sucesso
+ *         description: Informações do vínculo atualizadas com sucesso
  *       400:
- *         description: Vínculo não encontrado ou erro no banco
+ *         description: Erro ao atualizar as informações
  */
 
 /**
  * @swagger
  * /usuarioModulo/selecionarUsuariosModulos:
  *   get:
- *     summary: Lista todos os vínculos entre usuários e módulos
- *     tags: [Usuário-Módulo]
+ *     summary: Selecionar todos os vínculos entre usuários e módulos
+ *     tags: [Usuário Módulo]
  *     responses:
  *       200:
- *         description: Lista de vínculos
+ *         description: Lista de vínculos entre usuários e módulos
  *         content:
  *           application/json:
  *             schema:
@@ -80,28 +75,28 @@ const router = express.Router();
  *               items:
  *                 type: object
  *                 properties:
- *                   id_usuario_modulo:
+ *                   usuarioId:
  *                     type: integer
- *                     description: ID do vínculo
- *                   porcentagem_concluido:
- *                     type: number
- *                     description: Porcentagem concluída
- *                   id_modulo:
+ *                     example: 101
+ *                   moduloId:
  *                     type: integer
- *                     description: ID do módulo
- *                   id_usuario:
+ *                     example: 202
+ *                   progresso:
  *                     type: integer
- *                     description: ID do usuário
+ *                     example: 75
+ *                   status:
+ *                     type: string
+ *                     example: "ativo"
  *       400:
- *         description: Não há vínculos registrados ou erro no banco
+ *         description: Erro ao buscar os vínculos
  */
 
 /**
  * @swagger
  * /usuarioModulo/iniciarModulo:
  *   put:
- *     summary: Marca o início de um módulo para um usuário
- *     tags: [Usuário-Módulo]
+ *     summary: Iniciar um módulo para um usuário
+ *     tags: [Usuário Módulo]
  *     requestBody:
  *       required: true
  *       content:
@@ -109,22 +104,30 @@ const router = express.Router();
  *           schema:
  *             type: object
  *             properties:
- *               id:
+ *               usuarioId:
  *                 type: integer
- *                 description: ID do vínculo a ser iniciado
+ *                 example: 101
+ *               moduloId:
+ *                 type: integer
+ *                 example: 202
  *     responses:
  *       200:
  *         description: Módulo iniciado com sucesso
  *       400:
- *         description: Vínculo não encontrado ou erro no banco
+ *         description: Erro ao iniciar o módulo
  */
 
 router.post('/cadastro', cadastrar);
+router.post('/cadastrarRelacaoUsuariosModulos', cadastrarRelacaoUsuariosModulos);
 router.put("/editarUsuarioModulo", editarUsuarioModulo);
 router.get("/selecionarUsuariosModulos", selecionarUsuarioModulo);
 router.put("/iniciarModulo", iniciarModulo);
-
-
+router.put("/ativarUsuarioModulo", ativarUsuarioModulo);
+router.put("/desativarUsuarioModulo", desativarUsuarioModulo);
+router.post("/atualizarIniciado", atualizarIniciado);
+router.get("/listarModulosPorUsuario", listarModulosPorUsuario);
+router.get("/verificarAprovacao", verificarAprovacao);
+router.post("/definirNotaAprovado", definirNotaAprovado);
+router.post("/definirNota", definirNota);
 
 module.exports = router;
-

@@ -1,11 +1,13 @@
 const express = require('express');
-const { cadastrar, editarCertificado, desativarCertificado, ativarCertificado, selecionarCertificados } = require("../controllers/certificadoController");
+const { cadastrar, cadastrarComDataConclusao, editarCertificado, desativarCertificado, ativarCertificado, selecionarCertificados, selecionarCertificadosComUsuario } = require("../controllers/certificadoController");
 const router = express.Router();
+
+
 /**
  * @swagger
  * /certificado/cadastro:
  *   post:
- *     summary: Cadastra um novo certificado
+ *     summary: Cadastrar um certificado
  *     tags: [Certificado]
  *     requestBody:
  *       required: true
@@ -14,27 +16,24 @@ const router = express.Router();
  *           schema:
  *             type: object
  *             properties:
- *               dataConclusao:
+ *               titulo:
  *                 type: string
- *                 description: Data de conclusão no formato DD/MM/YYYY
- *               horas:
- *                 type: integer
- *                 description: Quantidade de horas
- *               idUsuario:
- *                 type: integer
- *                 description: ID do usuário associado
+ *                 example: "Certificado de Conclusão"
+ *               descricao:
+ *                 type: string
+ *                 example: "Certificado para quem concluiu o curso"
  *     responses:
- *       200:
+ *       201:
  *         description: Certificado cadastrado com sucesso
  *       400:
- *         description: Dados inválidos ou erro no banco
+ *         description: Erro ao cadastrar o certificado
  */
 
 /**
  * @swagger
  * /certificado/editarCertificado:
  *   put:
- *     summary: Edita um certificado existente
+ *     summary: Editar um certificado existente
  *     tags: [Certificado]
  *     requestBody:
  *       required: true
@@ -45,25 +44,25 @@ const router = express.Router();
  *             properties:
  *               id:
  *                 type: integer
- *                 description: ID do certificado a ser editado
- *               dataConclusao:
+ *                 example: 1
+ *               titulo:
  *                 type: string
- *                 description: Nova data de conclusão no formato DD/MM/YYYY
- *               horas:
- *                 type: integer
- *                 description: Nova quantidade de horas
+ *                 example: "Certificado Atualizado"
+ *               descricao:
+ *                 type: string
+ *                 example: "Descrição atualizada do certificado"
  *     responses:
  *       200:
  *         description: Certificado editado com sucesso
  *       400:
- *         description: Certificado não encontrado ou erro no banco
+ *         description: Erro ao editar o certificado
  */
 
 /**
  * @swagger
  * /certificado/desativarCertificado:
  *   put:
- *     summary: Desativa um certificado
+ *     summary: Desativar um certificado
  *     tags: [Certificado]
  *     requestBody:
  *       required: true
@@ -74,19 +73,19 @@ const router = express.Router();
  *             properties:
  *               id:
  *                 type: integer
- *                 description: ID do certificado a ser desativado
+ *                 example: 1
  *     responses:
  *       200:
  *         description: Certificado desativado com sucesso
  *       400:
- *         description: Certificado não encontrado ou erro no banco
+ *         description: Erro ao desativar o certificado
  */
 
 /**
  * @swagger
  * /certificado/ativarCertificado:
  *   put:
- *     summary: Ativa um certificado desativado
+ *     summary: Ativar um certificado
  *     tags: [Certificado]
  *     requestBody:
  *       required: true
@@ -97,23 +96,23 @@ const router = express.Router();
  *             properties:
  *               id:
  *                 type: integer
- *                 description: ID do certificado a ser ativado
+ *                 example: 1
  *     responses:
  *       200:
  *         description: Certificado ativado com sucesso
  *       400:
- *         description: Certificado não encontrado ou erro no banco
+ *         description: Erro ao ativar o certificado
  */
 
 /**
  * @swagger
  * /certificado/selecionarCertificados:
  *   get:
- *     summary: Lista todos os certificados ativos
+ *     summary: Selecionar todos os certificados
  *     tags: [Certificado]
  *     responses:
  *       200:
- *         description: Lista de certificados
+ *         description: Lista de certificados disponíveis
  *         content:
  *           application/json:
  *             schema:
@@ -121,26 +120,28 @@ const router = express.Router();
  *               items:
  *                 type: object
  *                 properties:
- *                   id_certificado:
+ *                   id:
  *                     type: integer
- *                     description: ID do certificado
- *                   data_conclusao:
+ *                     example: 1
+ *                   titulo:
  *                     type: string
- *                     description: Data de conclusão do certificado
- *                   horas:
- *                     type: integer
- *                     description: Quantidade de horas do certificado
- *                   id_usuario:
- *                     type: integer
- *                     description: ID do usuário associado ao certificado
+ *                     example: "Certificado de Excelência"
+ *                   descricao:
+ *                     type: string
+ *                     example: "Descrição do certificado de excelência"
+ *                   status:
+ *                     type: string
+ *                     example: "ativo"
  *       400:
- *         description: Não há certificados registrados ou erro no banco
+ *         description: Erro ao buscar certificados
  */
 
 router.post('/cadastro', cadastrar);
+router.post('/cadastro', cadastrarComDataConclusao);
 router.put('/editarCertificado', editarCertificado);
 router.put('/desativarCertificado', desativarCertificado);
 router.put("/ativarCertificado", ativarCertificado);
 router.get("/selecionarCertificados", selecionarCertificados)
+router.get("/selecionarCertificadosComUsuario", selecionarCertificadosComUsuario)
 
 module.exports = router;

@@ -1,11 +1,12 @@
 const express = require('express');
-const { cadastrar, editarAtividade, desativarAtividade, ativarAtividade, selecionarAtividades, acertar, errar } = require("../controllers/atividadeController");
+const { cadastrar, editarAtividade, desativarAtividade, ativarAtividade, selecionarAtividadesAtivo,selecionarAtividadesAdmin, selecionarAtividade, acertar, errar, selecionarAtividadesPorModulo } = require("../controllers/atividadeController");
 const router = express.Router();
+
 /**
  * @swagger
  * /atividade/cadastro:
  *   post:
- *     summary: Cadastra uma nova atividade
+ *     summary: Cadastrar atividade
  *     tags: [Atividade]
  *     requestBody:
  *       required: true
@@ -14,30 +15,24 @@ const router = express.Router();
  *           schema:
  *             type: object
  *             properties:
- *               respostaCerta:
+ *               titulo:
  *                 type: string
- *                 description: Resposta correta da atividade
- *               nome:
+ *                 example: "Nova Atividade"
+ *               descricao:
  *                 type: string
- *                 description: Nome da atividade
- *               texto:
- *                 type: string
- *                 description: Texto da atividade
- *               idModulo:
- *                 type: integer
- *                 description: ID do módulo associado
+ *                 example: "Descrição da nova atividade"
  *     responses:
- *       200:
+ *       201:
  *         description: Atividade cadastrada com sucesso
  *       400:
- *         description: Dados inválidos ou erro no banco
+ *         description: Erro ao cadastrar a atividade
  */
 
 /**
  * @swagger
  * /atividade/editarAtividade:
  *   put:
- *     summary: Edita uma atividade existente
+ *     summary: Editar uma atividade existente
  *     tags: [Atividade]
  *     requestBody:
  *       required: true
@@ -46,33 +41,27 @@ const router = express.Router();
  *           schema:
  *             type: object
  *             properties:
- *               idAtividade:
+ *               id:
  *                 type: integer
- *                 description: ID da atividade a ser editada
- *               respostaCerta:
+ *                 example: 1
+ *               titulo:
  *                 type: string
- *                 description: Nova resposta correta
- *               nome:
+ *                 example: "Atividade Editada"
+ *               descricao:
  *                 type: string
- *                 description: Novo nome da atividade
- *               texto:
- *                 type: string
- *                 description: Novo texto da atividade
- *               idModulo:
- *                 type: integer
- *                 description: Novo ID do módulo associado
+ *                 example: "Descrição atualizada da atividade"
  *     responses:
  *       200:
  *         description: Atividade editada com sucesso
  *       400:
- *         description: Atividade não encontrada ou erro no banco
+ *         description: Erro ao editar a atividade
  */
 
 /**
  * @swagger
  * /atividade/desativarAtividade:
  *   put:
- *     summary: Desativa uma atividade
+ *     summary: Desativar uma atividade
  *     tags: [Atividade]
  *     requestBody:
  *       required: true
@@ -81,21 +70,21 @@ const router = express.Router();
  *           schema:
  *             type: object
  *             properties:
- *               idAtividade:
+ *               id:
  *                 type: integer
- *                 description: ID da atividade a ser desativada
+ *                 example: 1
  *     responses:
  *       200:
  *         description: Atividade desativada com sucesso
  *       400:
- *         description: Atividade não encontrada ou erro no banco
+ *         description: Erro ao desativar a atividade
  */
 
 /**
  * @swagger
  * /atividade/ativarAtividade:
  *   put:
- *     summary: Ativa uma atividade desativada
+ *     summary: Ativar uma atividade
  *     tags: [Atividade]
  *     requestBody:
  *       required: true
@@ -104,25 +93,25 @@ const router = express.Router();
  *           schema:
  *             type: object
  *             properties:
- *               idAtividade:
+ *               id:
  *                 type: integer
- *                 description: ID da atividade a ser ativada
+ *                 example: 1
  *     responses:
  *       200:
  *         description: Atividade ativada com sucesso
  *       400:
- *         description: Atividade não encontrada ou erro no banco
+ *         description: Erro ao ativar a atividade
  */
 
 /**
  * @swagger
  * /atividade/selecionarAtividades:
  *   get:
- *     summary: Lista todas as atividades ativas
+ *     summary: Selecionar todas as atividades
  *     tags: [Atividade]
  *     responses:
  *       200:
- *         description: Lista de atividades
+ *         description: Lista de atividades disponíveis
  *         content:
  *           application/json:
  *             schema:
@@ -130,24 +119,25 @@ const router = express.Router();
  *               items:
  *                 type: object
  *                 properties:
- *                   id_atividade:
+ *                   id:
  *                     type: integer
- *                     description: ID da atividade
- *                   nome:
+ *                     example: 1
+ *                   titulo:
  *                     type: string
- *                     description: Nome da atividade
- *                   texto:
+ *                     example: "Título da Atividade"
+ *                   descricao:
  *                     type: string
- *                     description: Texto da atividade
- *       400:
- *         description: Não há atividades registradas ou erro no banco
+ *                     example: "Descrição da Atividade"
+ *                   status:
+ *                     type: string
+ *                     example: "ativo"
  */
 
 /**
  * @swagger
  * /atividade/acertar:
  *   post:
- *     summary: Marca uma atividade como acertada
+ *     summary: Registrar um acerto na atividade
  *     tags: [Atividade]
  *     requestBody:
  *       required: true
@@ -156,21 +146,24 @@ const router = express.Router();
  *           schema:
  *             type: object
  *             properties:
- *               id:
+ *               idAtividade:
  *                 type: integer
- *                 description: ID da atividade acertada
+ *                 example: 1
+ *               usuarioId:
+ *                 type: integer
+ *                 example: 101
  *     responses:
  *       200:
  *         description: Acerto registrado com sucesso
  *       400:
- *         description: Atividade não encontrada ou erro no banco
+ *         description: Erro ao registrar o acerto
  */
 
 /**
  * @swagger
  * /atividade/errar:
  *   post:
- *     summary: Marca uma atividade como errada
+ *     summary: Registrar um erro na atividade
  *     tags: [Atividade]
  *     requestBody:
  *       required: true
@@ -179,21 +172,27 @@ const router = express.Router();
  *           schema:
  *             type: object
  *             properties:
- *               id:
+ *               idAtividade:
  *                 type: integer
- *                 description: ID da atividade errada
+ *                 example: 1
+ *               usuarioId:
+ *                 type: integer
+ *                 example: 101
  *     responses:
  *       200:
  *         description: Erro registrado com sucesso
  *       400:
- *         description: Atividade não encontrada ou erro no banco
+ *         description: Erro ao registrar o erro
  */
 
 router.post('/cadastro', cadastrar);
 router.put('/editarAtividade', editarAtividade);
 router.put('/desativarAtividade', desativarAtividade);
 router.put('/ativarAtividade', ativarAtividade);
-router.get('/selecionarAtividades', selecionarAtividades);
+router.get('/selecionarAtividadesAtivo', selecionarAtividadesAtivo);
+router.get('/selecionarAtividadesAdmin',selecionarAtividadesAdmin)
+router.get('/selecionarAtividade', selecionarAtividade);
 router.post('/acertar', acertar);
 router.post('/errar', errar);
+router.get('/selecionarAtividadesPorModulo', selecionarAtividadesPorModulo);
 module.exports = router;

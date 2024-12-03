@@ -7,15 +7,15 @@ const db = require('../database/db');
 //localhost:8079/apiDados/perguntasErradas
 const perguntasErradas = (req, res) => {
 
-    const sql = `SELECT TEXTO, ERRO FROM ATIVIDADE ORDER BY ERRO DESC LIMIT 5;`;
+    const sql = `SELECT ID_ATIVIDADE, ERROS FROM ATIVIDADE ORDER BY ERROS DESC LIMIT 5;`;
 
     db.query(sql, (err, results) => {
-        if (err) {
+        if (err){
             return res.status(400).json({ mensagem: "Erro ao consultar o banco de dados" });
-        }
-        if (results.length === 0) {
+        } 
+        if (results.length === 0){
             return res.status(400).json({ mensagem: "Não há nenhum resultado !" });
-        }
+        } 
 
         const top5PerguntasErradas = results;
 
@@ -26,15 +26,15 @@ const perguntasErradas = (req, res) => {
 //localhost:8079/apiDados/perguntasCertas
 const perguntasCertas = (req, res) => {
 
-    const sql = `SELECT TEXTO, ACERTO FROM ATIVIDADE ORDER BY ACERTO DESC LIMIT 5;`;
+    const sql = `SELECT ID_ATIVIDADE, ACERTOS FROM ATIVIDADE ORDER BY ACERTOS DESC LIMIT 5;`;
 
     db.query(sql, (err, results) => {
-        if (err) {
+        if (err){
             return res.status(400).json({ mensagem: "Erro ao consultar o banco" });
-        }
-        if (results.length === 0) {
+        } 
+        if (results.length === 0){
             return res.status(400).json({ mensagem: "Não há nenhum resultado !" });
-        }
+        } 
 
         const top5PerguntasCertas = results;
 
@@ -48,12 +48,12 @@ const pessoasCertificado = (req, res) => {
     const sql = `SELECT COUNT(*) AS Quantidade_de_usuarios FROM USUARIO WHERE STATUS = 1;`;
 
     db.query(sql, (err, results) => {
-        if (err) {
+        if (err){
             return res.status(400).json({ mensagem: "Erro ao consultar o banco" });
-        }
-        if (results.length === 0) {
+        } 
+        if (results.length === 0){
             return res.status(400).json({ mensagem: "Não há nenhum resultado !" });
-        }
+        } 
 
         const PessoasCertificado = results;
 
@@ -65,14 +65,14 @@ const pessoasCertificado = (req, res) => {
 const quantidadeCertificado = (req, res) => {
 
     const sql = `SELECT COUNT(*) AS Quantidade_de_certificados FROM CERTIFICADO WHERE STATUS = TRUE;`;
-
+    
     db.query(sql, [true], (err, results) => {
-        if (err) {
+        if (err){
             return res.status(400).json({ mensagem: "Erro ao consultar o banco" });
-        }
-        if (results.length === 0) {
+        } 
+        if (results.length === 0){
             return res.status(400).json({ mensagem: "Não há nenhum resultado !" });
-        }
+        } 
 
         const quantidadeCertificado = results;
 
@@ -84,12 +84,12 @@ const quantidadeCertificado = (req, res) => {
 const mediaNotas = (req, res) => {
 
     const sql = `SELECT NOTA_FINAL FROM USUARIO_MODULO WHERE STATUS = ?;`;
-
+    
     db.query(sql, [true], (err, results) => {
-        if (err) {
+        if (err){
             return res.status(400).json({ mensagem: "Erro ao consultar o banco" });
-        }
-        if (results.length === 0) {
+        } 
+        if (results.length === 0){
             return res.status(400).json({ mensagem: "Não há nenhum resultado !" });
         }
 
@@ -105,9 +105,9 @@ const moduloIniciado = (req, res) => {
     const sql = `SELECT COUNT(*) as Iniciado_modulos FROM USUARIO_MODULO WHERE iniciado = TRUE AND STATUS = TRUE;`;
 
     db.query(sql, (err, results) => {
-        if (err) {
+        if (err){
             return res.status(400).json({ mensagem: "Erro ao consultar o banco" });
-        }
+        } 
         if (results.length === 0) return res.status(400).json({ mensagem: "Não há nenhum resultado !" });
 
         const moduloIniciado = results;
@@ -120,14 +120,14 @@ const moduloIniciado = (req, res) => {
 const totalModulos = (req, res) => {
 
     const sql = `SELECT COUNT(*) as Total_modulos FROM usuario_modulo WHERE STATUS = ?;`;
-
+    
     db.query(sql, [true], (err, results) => {
-        if (err) {
+        if (err){
             return res.status(400).json({ mensagem: "Erro ao consultar o banco" });
-        }
-        if (results.length === 0) {
+        } 
+        if (results.length === 0){
             return res.status(400).json({ mensagem: "Não há nenhum resultado !" });
-        }
+        } 
 
         const totalModulos = results;
 
