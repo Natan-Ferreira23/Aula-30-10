@@ -36,6 +36,7 @@ Este projeto é o back end de um aplicativo chamado motociclista consciente, que
    ```bash
    node server.js
 ```
+```bash
 Endpoints Principais
 Método	Rota	Descrição
 POST	/usuario/cadastro	Cadastrar um novo usuário
@@ -44,7 +45,8 @@ GET	/usuario/selecionarUsuarios	Listar todos os usuários
 PUT	/usuario/editarSenha	Alterar a senha do usuário
 GET	/api-docs	Acessar a documentação Swagger
 Consulte a documentação completa no Swagger: http://localhost:8079/api-docs.
-
+```
+```bash
 Estrutura do Projeto
 📂 nome-do-projeto
 ├── 📂 controllers     # Lógica dos endpoints
@@ -54,7 +56,7 @@ Estrutura do Projeto
 ├── server.js          # Configuração do servidor
 ├── swagger.js         # Configuração do Swagger
 └── package.json       # Gerenciamento de dependências
-
+```
 ## Modelagem do Banco de Dados
 ![Diagrama do Banco de Dados](./docs/Banco_de_dados.jpg)
 
