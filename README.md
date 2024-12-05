@@ -137,6 +137,6 @@ Estrutura do Projeto
 ├── server.js          # Configuração do servidor
 ├── swagger.js         # Configuração do Swagger
 └── package.json       # Gerenciamento de dependências
- 
+ ```
  ## UML
 ![Descrição da Imagem](./docs/uml.jpg)
