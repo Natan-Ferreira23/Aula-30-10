@@ -55,6 +55,9 @@ Estrutura do Projeto
 ├── swagger.js         # Configuração do Swagger
 └── package.json       # Gerenciamento de dependências
 
+## Modelagem do Banco de Dados
+![Diagrama do Banco de Dados](docs/assets/Banco_de_dados.png)
+
 
 
 
