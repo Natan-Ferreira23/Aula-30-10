@@ -1,6 +1,6 @@
 # Back end - aplicativo Motocilcista Consciente
 
-Este projeto é o back end de um aplicativo chamado motociclista consciente, que visa ensinar e conscientizar atráves de um jogo de perguntas e respostas que é desenvolvido em Node.js e Express. Ele fornece uma API RESTful para gerenciar entidades como **certificado**, **usuarios**, **usuario_modulo**,**modulos**, **atividade** e **alternativa**.
+Este projeto é o back end de um aplicativo chamado motociclista consciente, que visa ensinar e conscientizar atráves de um jogo de perguntas e respostas que é desenvolvido em Node.js e Express. Ele fornece uma API RESTful para gerenciar entidades como *certificado, **usuarios, **usuario_modulo,modulos, **atividade* e *alternativa*.
 
 ---
 
@@ -24,16 +24,16 @@ Este projeto é o back end de um aplicativo chamado motociclista consciente, que
 
 ### Passos para Instalação
 1. Clone este repositório:
-   ```bash
+   bash
    git clone https://github.com/seu-usuario/nome-do-repositorio.git
 2. Entre no diretório do projeto:
-   ```bash
+   bash
    cd nome-do-repositorio
 3. Instale as dependências:
-   ```bash
+   bash
    npm install
 4. Crie o banco de Dados em seu SGBD de preferencia, sendo necessario que o banco seja relacional:
-   ```bash
+   bash
    CREATE DATABASE cmtu;
 
    USE cmtu;
@@ -113,16 +113,11 @@ Este projeto é o back end de um aplicativo chamado motociclista consciente, que
       FOREIGN KEY (FK_ATIVIDADE_ID_ATIVIDADE)
       REFERENCES ATIVIDADE(ID_ATIVIDADE) ON DELETE CASCADE;
 5. configure a conexão com seu banco de dados no arquivo ds.js que esta localizado na pasta:
-   ```bash
+   bash
    database/db.js
 6. Inicie o servidor:
-   ```bash
+   bash
    node server.js
-<<<<<<< HEAD
-=======
-```
-```bash
->>>>>>> 703aecb94f9214d7c526be76b1815bf9a3a628c3
 Endpoints Principais
 Método	Rota	Descrição
 POST	/usuario/cadastro	Cadastrar um novo usuário
@@ -131,8 +126,7 @@ GET	/usuario/selecionarUsuarios	Listar todos os usuários
 PUT	/usuario/editarSenha	Alterar a senha do usuário
 GET	/api-docs	Acessar a documentação Swagger
 Consulte a documentação completa no Swagger: http://localhost:8079/api-docs.
-```
-```bash
+
 Estrutura do Projeto
 📂 nome-do-projeto
 ├── 📂 controllers     # Lógica dos endpoints
@@ -141,17 +135,4 @@ Estrutura do Projeto
 ├── 📂 middlewares     # Middleware de autenticação e validação
 ├── server.js          # Configuração do servidor
 ├── swagger.js         # Configuração do Swagger
-<<<<<<< HEAD
 └── package.json       # Gerenciamento de dependências
-=======
-└── package.json       # Gerenciamento de dependências
-```
-## Modelagem do Banco de Dados
-![Diagrama do Banco de Dados](./docs/Banco_de_dados.jpg)
-
-
-
-
-
-
->>>>>>> 703aecb94f9214d7c526be76b1815bf9a3a628c3
