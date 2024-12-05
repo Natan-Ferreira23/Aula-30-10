@@ -26,12 +26,12 @@ const cadastrar = (req, res) => {
 //localhost:8079/atividade/editarAtividade
 const editarAtividade = (req, res) => {
 
-    const { texto, idAtividade } = req.body;
+    const { id, texto } = req.body;
 
     const editarAtividade = "UPDATE atividade SET texto = ? WHERE id_atividade = ?";
     const verificaAitividade = "SELECT * FROM atividade WHERE id_atividade = ?";
 
-    if (!idAtividade){
+    if (!id){
         return res.status(400).json({ mensagem: "Informe qual atividade deseja editar" });
     }
     if (!texto){
@@ -39,7 +39,7 @@ const editarAtividade = (req, res) => {
     } 
 
     //verifica se o id existe
-    db.query(verificaAitividade, [idAtividade], (err, results) => {
+    db.query(verificaAitividade, [id], (err, results) => {
         if (err){
             return res.status(400).json({ mensagem: "Erro ao consultar o banco" });
         } 
@@ -48,7 +48,7 @@ const editarAtividade = (req, res) => {
         } 
 
         //edita a atividade
-        db.query(editarAtividade, [respostaCerta, nome, texto, idModulo, idAtividade], (err, results) => {
+        db.query(editarAtividade, [texto, id], (err, results) => {
             if (err){
                 return res.status(400).json({ mensagem: "Erro ao consultar o banco" });
             } 

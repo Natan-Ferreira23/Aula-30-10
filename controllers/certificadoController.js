@@ -106,21 +106,16 @@ const selecionarCertificadosComUsuario = (req, res) => {
 //localhost:8079/certificado/editarCertificado (Update)
 const editarCertificado = (req, res) => {
 
-    const { id, texto, horas, dataConclusao } = req.body;
+    const { id, texto, horas, data_conclusao } = req.body;
 
     const editar = "UPDATE certificado SET texto = ?, horas = ?, data_conclusao=? WHERE id_certificado = ?";
 
     // Verificação simplificada
-    if (!id || !texto || !horas || !dataConclusao) {
+    if (!id || !texto || !horas || !data_conclusao) {
         return res.status(400).json({ mensagem: "É necessário informar o id, texto, horas e data de conclusão" });
     }
 
-    // Formato da data fornecida pelo usuário
-    const dataInput = dataConclusao;
-    const [dia, mes, ano] = dataInput.split('/');
-    const dataFormatada = String(ano + "-" + mes + "-" + dia); // Formato YYYY-MM-DD
-
-    db.query(editar, [texto, horas, dataFormatada, id], (err, results) => {
+    db.query(editar, [texto, horas, data_conclusao, id], (err, results) => {
         if (err) {
             return res.status(400).json({ mensagem: "Erro ao consultar o banco" });
         }

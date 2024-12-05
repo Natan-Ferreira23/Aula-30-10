@@ -25,18 +25,18 @@ const cadastrar = (req, res) => {
 //localhost:8079/alternativa/editarAlternativa
 const editarAlternativa = (req, res) => {
 
-    const { idAlternativa, respostaCerta, texto } = req.body;
+    const { id, texto } = req.body;
     const verifica = "SELECT * FROM alternativa WHERE id_alternativa = ?";
-    const atualizarAlternativa = "UPDATE alternativa SET texto = ?, status = ?, resposta_certa = ? WHERE id_alternativa = ?";
+    const atualizarAlternativa = "UPDATE alternativa SET texto = ? WHERE id_alternativa = ?";
 
-    if (!idAlternativa){
+    if (!id){
         return res.status(400).json({ mensagem: "É necessário informar idAlternativa" });
     } 
     if (!texto){
         return res.status(400).json({ mensagem: "É necessário informar o texto " });
     }
 
-    db.query(verifica, [idAlternativa], (err, results) => {
+    db.query(verifica, [id], (err, results) => {
         if (err){
             return res.status(400).json({ mensagem: "Erro ao consultar o banco " });
         } 
@@ -44,7 +44,7 @@ const editarAlternativa = (req, res) => {
             return res.status(400).json({ mensagem: "Não foi encontrado  uma alternativa com este id" });
         }
 
-        db.query(atualizarAlternativa, [texto, respostaCerta, idAlternativa], (err, results) => {
+        db.query(atualizarAlternativa, [texto, id], (err, results) => {
             if (err){
                 return res.status(400).json({ mensagem: "Erro ao consultar o banco " });
             } 

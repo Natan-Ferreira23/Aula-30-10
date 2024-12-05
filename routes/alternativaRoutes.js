@@ -306,7 +306,7 @@ const router = express.Router();
  */
 
 router.post('/cadastro', cadastrar);
-router.put('/editarAlternativa', editarAlternativa);
+router.post('/editarAlternativa', editarAlternativa);
 router.put('/desativarAlternativa', desativarAlternativa);
 router.put('/ativarAlternativa', ativarAlternativa);
 router.get('/selecionarAlternativasModulos', selecionarAlternativasModulos);
