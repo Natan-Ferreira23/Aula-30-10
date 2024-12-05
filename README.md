@@ -31,11 +31,11 @@ Este projeto é o back end de um aplicativo chamado motociclista consciente, que
 3.Instale as dependências:
    ```bash
   npm install
-
+```
 4.Inicie o servidor:
    ```bash
    node server.js
-
+```
 Endpoints Principais
 Método	Rota	Descrição
 POST	/usuario/cadastro	Cadastrar um novo usuário
