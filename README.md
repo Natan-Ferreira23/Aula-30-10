@@ -119,7 +119,6 @@ Este projeto é o back end de um aplicativo chamado motociclista consciente, que
    ```bash
    node server.js
 ```
-
 Endpoints Principais
 Método	Rota	Descrição
 POST	/usuario/cadastro	Cadastrar um novo usuário
