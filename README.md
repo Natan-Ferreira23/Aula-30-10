@@ -56,7 +56,7 @@ Estrutura do Projeto
 └── package.json       # Gerenciamento de dependências
 
 ## Modelagem do Banco de Dados
-![Diagrama do Banco de Dados](docs/assets/Banco_de_dados.png)
+![Diagrama do Banco de Dados](./docs/Banco_de_dados.jpg)
 
 
 
